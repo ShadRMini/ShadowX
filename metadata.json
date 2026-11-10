@@ -1,0 +1,6 @@
+{
+  "name": "ShadowX — Digital Engineering & Full-Stack Studio",
+  "description": "الصفحة الرسمية لفريق ShadowX البرمجي — بناء وبرمجة متاجر ومنصات التجارة الرقمية والأنظمة المؤتمتة بمعايير إنتاجية فائقة (المطورون الرسميون لمنصة shad-vip.store).",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
