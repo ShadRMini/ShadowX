@@ -1792,45 +1792,114 @@ function SectionsSkeleton() {
 const FLOATING_BADGES = [
   {
     label: '< API />',
-    top: '14%',
-    left: '7%',
+    top: '13%',
+    left: '4%',
     delay: 0,
-    duration: 8.5,
+    duration: 5.5,
+    hideOnMobile: false,
   },
   {
     label: '{ USDT }',
-    top: '24%',
-    right: '6%',
-    delay: 1.2,
-    duration: 9.5,
+    top: '21%',
+    right: '4%',
+    delay: 0.8,
+    duration: 6.2,
+    hideOnMobile: false,
   },
   {
     label: 'Sʜᴀᴅᴏᴡ𝐗',
-    top: '48%',
-    left: '5%',
-    delay: 0.6,
-    duration: 10.5,
+    top: '44%',
+    left: '3%',
+    delay: 0.4,
+    duration: 6.8,
+    hideOnMobile: true,
   },
   {
     label: '⚡ أتمتة ١٠٠٪',
-    top: '56%',
-    right: '5%',
-    delay: 1.8,
-    duration: 9,
+    top: '54%',
+    right: '4%',
+    delay: 1.1,
+    duration: 5.8,
+    hideOnMobile: false,
   },
   {
     label: 'Binance Pay',
-    top: '76%',
-    left: '8%',
-    delay: 0.9,
-    duration: 11,
+    top: '74%',
+    left: '5%',
+    delay: 0.6,
+    duration: 6.5,
+    hideOnMobile: false,
   },
   {
     label: '٢٤/٧',
-    top: '82%',
-    right: '7%',
-    delay: 2.1,
-    duration: 8.8,
+    top: '83%',
+    right: '5%',
+    delay: 1.4,
+    duration: 5.4,
+    hideOnMobile: false,
+  },
+];
+
+const GEOMETRIC_SHAPES = [
+  {
+    id: 'hex-top-right',
+    type: 'hexagon',
+    top: '11%',
+    right: '14%',
+    size: 'w-16 h-16 sm:w-24 sm:h-24',
+    duration: 14,
+    floatDuration: 5.5,
+    delay: 0,
+  },
+  {
+    id: 'ring-top-left',
+    type: 'orbit-ring',
+    top: '18%',
+    left: '12%',
+    size: 'w-20 h-20 sm:w-28 sm:h-28',
+    duration: 18,
+    floatDuration: 6.5,
+    delay: 0.5,
+  },
+  {
+    id: 'diamond-mid-right',
+    type: 'diamond',
+    top: '38%',
+    right: '9%',
+    size: 'w-14 h-14 sm:w-20 sm:h-20',
+    duration: 12,
+    floatDuration: 5,
+    delay: 1,
+  },
+  {
+    id: 'hex-mid-left',
+    type: 'hexagon',
+    top: '62%',
+    left: '10%',
+    size: 'w-16 h-16 sm:w-24 sm:h-24',
+    duration: 16,
+    floatDuration: 6,
+    delay: 0.3,
+  },
+  {
+    id: 'ring-bottom-right',
+    type: 'orbit-ring',
+    top: '70%',
+    right: '13%',
+    size: 'w-20 h-20 sm:w-28 sm:h-28',
+    duration: 20,
+    floatDuration: 7,
+    delay: 0.9,
+  },
+  {
+    id: 'diamond-bottom-left',
+    type: 'diamond',
+    top: '86%',
+    left: '16%',
+    size: 'w-12 h-12 sm:w-16 sm:h-16',
+    duration: 13,
+    floatDuration: 5.2,
+    delay: 1.4,
   },
 ];
 
@@ -1840,128 +1909,224 @@ function AnimatedLandingBackground() {
       aria-hidden="true"
       className="pointer-events-none fixed inset-0 z-0 overflow-hidden select-none"
     >
-      {/* ١. شبكة هندسية معمارية (Architectural Grid) */}
-      <div className="absolute inset-0 bg-architectural-grid opacity-80" />
+      {/* ١. شبكة هندسية معمارية متحركة باستمرار (Panning Architectural Grid) */}
+      <div className="absolute inset-0 bg-architectural-grid opacity-95" />
 
-      {/* ٢. مصفوفة نقاط دقيقة (Dot Matrix) */}
-      <div className="absolute inset-0 bg-dot-matrix opacity-45" />
+      {/* ٢. مصفوفة نقاط دقيقة متحركة بالاتجاه المعاكس (Drifting Dot Matrix) */}
+      <div className="absolute inset-0 bg-dot-matrix opacity-70" />
 
-      {/* ٣. هالات ضوئية متحركة في الزوايا */}
+      {/* ٣. نبضات ضوئية سريعة تسري على خطوط الشبكة أفقياً وعمودياً (Cyber Grid Light Beams) */}
+      <motion.div
+        animate={{ x: ['-25vw', '125vw'] }}
+        transition={{ duration: 6.5, repeat: Infinity, ease: 'linear' }}
+        className="absolute top-[22%] left-0 w-44 sm:w-72 h-[2px] bg-gradient-to-r from-transparent via-[#8b5cf6] to-transparent shadow-[0_0_16px_#8b5cf6] opacity-75"
+      />
+      <motion.div
+        animate={{ x: ['125vw', '-25vw'] }}
+        transition={{ duration: 8, repeat: Infinity, ease: 'linear', delay: 1.8 }}
+        className="absolute top-[58%] left-0 w-48 sm:w-80 h-[2px] bg-gradient-to-r from-transparent via-[#3434d9] to-transparent shadow-[0_0_18px_#3434d9] opacity-75"
+      />
+      <motion.div
+        animate={{ x: ['-25vw', '125vw'] }}
+        transition={{ duration: 7.2, repeat: Infinity, ease: 'linear', delay: 3.2 }}
+        className="absolute top-[84%] left-0 w-40 sm:w-64 h-[2px] bg-gradient-to-r from-transparent via-violet-400 to-transparent shadow-[0_0_14px_#a78bfa] opacity-65"
+      />
+      <motion.div
+        animate={{ y: ['-25vh', '125vh'] }}
+        transition={{ duration: 7.5, repeat: Infinity, ease: 'linear', delay: 0.7 }}
+        className="absolute top-0 left-[18%] w-[2px] h-44 sm:h-64 bg-gradient-to-b from-transparent via-[#8b5cf6] to-transparent shadow-[0_0_16px_#8b5cf6] opacity-60"
+      />
+      <motion.div
+        animate={{ y: ['125vh', '-25vh'] }}
+        transition={{ duration: 9, repeat: Infinity, ease: 'linear', delay: 2.4 }}
+        className="absolute top-0 right-[18%] w-[2px] h-48 sm:h-72 bg-gradient-to-b from-transparent via-[#3434d9] to-transparent shadow-[0_0_16px_#3434d9] opacity-60"
+      />
+
+      {/* ٤. هالات ضوئية متحركة في الخلفية */}
       <motion.div
         animate={{
-          x: [0, 35, -20, 0],
-          y: [0, -30, 20, 0],
-          scale: [1, 1.08, 0.95, 1],
+          x: [0, 65, -45, 0],
+          y: [0, -55, 40, 0],
+          scale: [1, 1.15, 0.92, 1],
         }}
-        transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
-        className="absolute -top-32 -right-32 w-[480px] h-[480px] rounded-full bg-gradient-to-br from-[#3434d9]/18 via-[#8b5cf6]/12 to-transparent blur-[130px]"
+        transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
+        className="absolute -top-24 -right-24 w-[380px] sm:w-[500px] h-[380px] sm:h-[500px] rounded-full bg-gradient-to-br from-[#3434d9]/25 via-[#8b5cf6]/18 to-transparent blur-[115px]"
       />
       <motion.div
         animate={{
-          x: [0, -40, 25, 0],
-          y: [0, 35, -25, 0],
-          scale: [1, 0.94, 1.06, 1],
+          x: [0, -60, 45, 0],
+          y: [0, 55, -40, 0],
+          scale: [1, 0.9, 1.12, 1],
         }}
-        transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut' }}
-        className="absolute top-[42%] -left-40 w-[520px] h-[520px] rounded-full bg-gradient-to-tr from-[#6d28d9]/16 via-[#3434d9]/10 to-transparent blur-[140px]"
+        transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
+        className="absolute top-[40%] -left-32 w-[400px] sm:w-[520px] h-[400px] sm:h-[520px] rounded-full bg-gradient-to-tr from-[#6d28d9]/22 via-[#3434d9]/14 to-transparent blur-[125px]"
       />
 
-      {/* ٤. رسوم خطوط ومسارات هندسية متوهجة (SVG Vector Mesh & Circuits) */}
+      {/* ٥. مسارات ومنحنيات هندسية متوهجة متحركة (Animated Vector Waves) */}
       <svg
-        className="absolute inset-0 w-full h-full opacity-30"
+        className="absolute inset-0 w-full h-full opacity-65"
         viewBox="0 0 1440 900"
         fill="none"
         preserveAspectRatio="xMidYMid slice"
       >
         <defs>
           <linearGradient id="shadowx-line-grad-1" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#3434d9" stopOpacity="0" />
-            <stop offset="50%" stopColor="#8b5cf6" stopOpacity="0.55" />
-            <stop offset="100%" stopColor="#3434d9" stopOpacity="0" />
+            <stop offset="0%" stopColor="#3434d9" stopOpacity="0.1" />
+            <stop offset="50%" stopColor="#a855f7" stopOpacity="0.85" />
+            <stop offset="100%" stopColor="#3434d9" stopOpacity="0.1" />
           </linearGradient>
           <linearGradient id="shadowx-line-grad-2" x1="100%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#8b5cf6" stopOpacity="0" />
-            <stop offset="50%" stopColor="#3434d9" stopOpacity="0.45" />
-            <stop offset="100%" stopColor="#8b5cf6" stopOpacity="0" />
+            <stop offset="0%" stopColor="#8b5cf6" stopOpacity="0.1" />
+            <stop offset="50%" stopColor="#3434d9" stopOpacity="0.8" />
+            <stop offset="100%" stopColor="#c084fc" stopOpacity="0.1" />
           </linearGradient>
         </defs>
 
-        {/* مسارات منحنية هندسية */}
         <motion.path
-          d="M-100 180 C 320 60, 580 340, 1020 160 C 1240 70, 1400 220, 1560 140"
+          d="M-100 190 C 320 50, 580 350, 1020 150 C 1240 60, 1400 230, 1560 130"
           stroke="url(#shadowx-line-grad-1)"
-          strokeWidth="1.5"
-          strokeDasharray="8 8"
-          initial={{ pathLength: 0.2, opacity: 0.3 }}
-          animate={{ pathLength: [0.3, 1, 0.3], opacity: [0.25, 0.65, 0.25] }}
-          transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
+          strokeWidth="2"
+          strokeDasharray="12 10"
+          animate={{
+            strokeDashoffset: [0, -220],
+            y: [0, -18, 0],
+            opacity: [0.45, 0.85, 0.45],
+          }}
+          transition={{
+            strokeDashoffset: { duration: 6, repeat: Infinity, ease: 'linear' },
+            y: { duration: 7, repeat: Infinity, ease: 'easeInOut' },
+            opacity: { duration: 5, repeat: Infinity, ease: 'easeInOut' },
+          }}
         />
 
         <motion.path
-          d="M-80 680 C 340 520, 760 820, 1140 610 C 1310 520, 1420 670, 1540 590"
+          d="M-80 670 C 340 500, 760 830, 1140 600 C 1310 510, 1420 680, 1540 580"
           stroke="url(#shadowx-line-grad-2)"
-          strokeWidth="1.5"
-          initial={{ pathLength: 0.3, opacity: 0.2 }}
-          animate={{ pathLength: [0.4, 1, 0.4], opacity: [0.2, 0.55, 0.2] }}
-          transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut' }}
+          strokeWidth="2"
+          strokeDasharray="14 12"
+          animate={{
+            strokeDashoffset: [0, 240],
+            y: [0, 20, 0],
+            opacity: [0.4, 0.8, 0.4],
+          }}
+          transition={{
+            strokeDashoffset: { duration: 7, repeat: Infinity, ease: 'linear' },
+            y: { duration: 8, repeat: Infinity, ease: 'easeInOut' },
+            opacity: { duration: 6, repeat: Infinity, ease: 'easeInOut' },
+          }}
         />
-
-        {/* أشكال سداسية ومربعات هندسية عائمة */}
-        <g className="animate-float-slow" opacity="0.45">
-          <polygon
-            points="180,110 205,124 205,152 180,166 155,152 155,124"
-            stroke="#8b5cf6"
-            strokeOpacity="0.4"
-            strokeWidth="1.2"
-            fill="rgba(52, 52, 217, 0.04)"
-          />
-          <circle cx="180" cy="138" r="3" fill="#8b5cf6" fillOpacity="0.5" />
-        </g>
-
-        <g className="animate-float-reverse" opacity="0.4">
-          <polygon
-            points="1260,260 1290,277 1290,311 1260,328 1230,311 1230,277"
-            stroke="#3434d9"
-            strokeOpacity="0.45"
-            strokeWidth="1.2"
-            fill="rgba(139, 92, 246, 0.04)"
-          />
-          <circle cx="1260" cy="294" r="3.5" fill="#3434d9" fillOpacity="0.6" />
-        </g>
-
-        <g className="animate-float-slow" opacity="0.35">
-          <rect
-            x="1180"
-            y="690"
-            width="44"
-            height="44"
-            rx="10"
-            transform="rotate(18 1202 712)"
-            stroke="#8b5cf6"
-            strokeOpacity="0.35"
-            strokeWidth="1.2"
-            fill="rgba(52, 52, 217, 0.03)"
-          />
-        </g>
-
-        <g className="animate-float-reverse" opacity="0.35">
-          <rect
-            x="130"
-            y="590"
-            width="38"
-            height="38"
-            rx="9"
-            transform="rotate(-15 149 609)"
-            stroke="#3434d9"
-            strokeOpacity="0.4"
-            strokeWidth="1.2"
-            fill="rgba(139, 92, 246, 0.03)"
-          />
-        </g>
       </svg>
 
-      {/* ٥. وسوم ورموز برمجية زجاجية متحركة (Floating Tech Tags) على الشاشات الكبيرة */}
-      <div className="hidden xl:block">
+      {/* ٦. عناصر وأشكال هندسية ثلاثية وثنائية الأبعاد تدور وتطفو باستمرار (جميع الشاشات) */}
+      {GEOMETRIC_SHAPES.map((shape) => (
+        <motion.div
+          key={shape.id}
+          style={{
+            top: shape.top,
+            left: shape.left,
+            right: shape.right,
+          }}
+          animate={{
+            y: [0, -30, 0],
+            x: [0, 14, -10, 0],
+          }}
+          transition={{
+            duration: shape.floatDuration,
+            delay: shape.delay,
+            repeat: Infinity,
+            ease: 'easeInOut',
+          }}
+          className={`absolute ${shape.size} flex items-center justify-center opacity-70 sm:opacity-85`}
+        >
+          {shape.type === 'hexagon' && (
+            <motion.svg
+              viewBox="0 0 100 100"
+              className="w-full h-full overflow-visible drop-shadow-[0_0_12px_rgba(139,92,246,0.45)]"
+              animate={{ rotate: 360 }}
+              transition={{
+                duration: shape.duration,
+                repeat: Infinity,
+                ease: 'linear',
+              }}
+            >
+              <polygon
+                points="50,6 90,28 90,72 50,94 10,72 10,28"
+                fill="rgba(52, 52, 217, 0.08)"
+                stroke="#8b5cf6"
+                strokeWidth="2"
+                strokeOpacity="0.65"
+              />
+              <polygon
+                points="50,22 76,36 76,64 50,78 24,64 24,36"
+                fill="none"
+                stroke="#c084fc"
+                strokeWidth="1.2"
+                strokeDasharray="4 4"
+                strokeOpacity="0.55"
+              />
+              <circle cx="50" cy="50" r="4" fill="#a855f7" fillOpacity="0.8" />
+            </motion.svg>
+          )}
+
+          {shape.type === 'orbit-ring' && (
+            <div className="relative w-full h-full flex items-center justify-center">
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{
+                  duration: shape.duration,
+                  repeat: Infinity,
+                  ease: 'linear',
+                }}
+                className="absolute inset-0 rounded-full border-2 border-dashed border-violet-400/50 shadow-[0_0_20px_rgba(139,92,246,0.25)]"
+              />
+              <motion.div
+                animate={{ rotate: -360, scale: [0.92, 1.08, 0.92] }}
+                transition={{
+                  rotate: {
+                    duration: shape.duration * 0.7,
+                    repeat: Infinity,
+                    ease: 'linear',
+                  },
+                  scale: {
+                    duration: 3.5,
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                  },
+                }}
+                className="w-3/5 h-3/5 rounded-full border border-[#3434d9]/70 bg-[#3434d9]/10 flex items-center justify-center"
+              >
+                <div className="w-2.5 h-2.5 rounded-full bg-violet-400 shadow-[0_0_10px_#a855f7]" />
+              </motion.div>
+            </div>
+          )}
+
+          {shape.type === 'diamond' && (
+            <div className="relative w-full h-full flex items-center justify-center">
+              <motion.div
+                animate={{ rotate: [45, 405] }}
+                transition={{
+                  duration: shape.duration,
+                  repeat: Infinity,
+                  ease: 'linear',
+                }}
+                className="w-4/5 h-4/5 rounded-xl border-2 border-violet-400/55 bg-gradient-to-br from-[#3434d9]/15 to-[#8b5cf6]/10 shadow-[0_0_18px_rgba(52,52,217,0.35)]"
+              />
+              <motion.div
+                animate={{ rotate: [405, 45] }}
+                transition={{
+                  duration: shape.duration * 0.8,
+                  repeat: Infinity,
+                  ease: 'linear',
+                }}
+                className="absolute w-1/2 h-1/2 rounded-lg border border-dashed border-violet-300/60"
+              />
+            </div>
+          )}
+        </motion.div>
+      ))}
+
+      {/* ٧. وسوم ورموز برمجية زجاجية متحركة (Floating Tech Tags) على الموبايل والديسكتوب */}
+      <div>
         {FLOATING_BADGES.map((badge, idx) => (
           <motion.div
             key={idx}
@@ -1971,9 +2136,10 @@ function AnimatedLandingBackground() {
               right: badge.right,
             }}
             animate={{
-              y: [0, -14, 0],
-              rotate: [-1.5, 1.5, -1.5],
-              opacity: [0.32, 0.62, 0.32],
+              y: [0, -22, 0],
+              x: [0, idx % 2 === 0 ? 12 : -12, 0],
+              rotate: [-3, 3, -3],
+              opacity: [0.55, 0.92, 0.55],
             }}
             transition={{
               duration: badge.duration,
@@ -1981,7 +2147,9 @@ function AnimatedLandingBackground() {
               repeat: Infinity,
               ease: 'easeInOut',
             }}
-            className="absolute px-3.5 py-1.5 rounded-2xl bg-[#14141f]/70 backdrop-blur-md border border-violet-500/20 shadow-lg shadow-[#3434d9]/10 text-xs font-mono font-bold text-violet-300/80 tracking-wider"
+            className={`${
+              badge.hideOnMobile ? 'hidden sm:inline-flex' : 'inline-flex'
+            } absolute px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-2xl bg-[#14141f]/80 backdrop-blur-md border border-violet-400/35 shadow-[0_0_20px_rgba(139,92,246,0.22)] text-[10px] sm:text-xs font-mono font-bold text-violet-200 tracking-wider`}
           >
             <span dir="ltr">{badge.label}</span>
           </motion.div>
