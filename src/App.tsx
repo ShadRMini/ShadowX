@@ -369,33 +369,27 @@ const heroSubtitleWords = SITE_CONTENT.hero.subtitle.split(' ');
 
 function Hero({ onOpenProjectModal }: { onOpenProjectModal: () => void }) {
   return (
-    <motion.section
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.15 }}
-      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      className="relative pt-14 pb-20 sm:pt-20 sm:pb-28 overflow-hidden"
-    >
-      {/* تأثير توهج (glow) خلف قسم الـ Hero بتدرج دائري blur من اللون الأساسي */}
+    <section className="relative pt-12 pb-18 sm:pt-20 sm:pb-28 overflow-hidden">
+      {/* تأثير توهج (glow) خلف قسم الـ Hero بتدرج دائري خفيف */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[360px] h-[360px] sm:w-[680px] sm:h-[420px] rounded-full bg-gradient-to-tr from-[#3434d9]/35 via-[#6d28d9]/25 to-transparent blur-[110px] -z-10"
+        className="pointer-events-none absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] h-[280px] sm:w-[600px] sm:h-[380px] rounded-full bg-gradient-to-tr from-[#3434d9]/30 via-[#6d28d9]/20 to-transparent blur-3xl -z-10"
       />
 
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
         <div className="max-w-4xl mx-auto text-center">
-          {/* ١. شارة صغيرة أعلى العنوان مع حركة كشف ناعمة */}
+          {/* ١. شارة صغيرة أعلى العنوان مع حركة كشف سريعة وناعمة */}
           <motion.div
-            initial={{ opacity: 0, y: -14, scale: 0.94, filter: 'blur(4px)' }}
-            animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
-            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            initial={{ opacity: 0, y: -10, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
             className="inline-flex items-center gap-2.5 px-4 py-2 rounded-2xl bg-[#14141f] border border-white/[0.08] text-violet-300 text-sm font-medium mb-7 shadow-sm"
           >
             <Sparkles className="w-4 h-4 text-[#8b5cf6] shrink-0" />
             <span>{SITE_CONTENT.hero.badge}</span>
           </motion.div>
 
-          {/* ٢. العنوان الرئيسي H1 ضخم مع ظهور متدرج للكلمات (Staggered Word Reveal) */}
+          {/* ٢. العنوان الرئيسي H1 ضخم مع ظهور متدرج سريع للكلمات بدون فلاتر blur ثقيلة على الهاتف */}
           <motion.h1
             initial="hidden"
             animate="visible"
@@ -403,8 +397,8 @@ function Hero({ onOpenProjectModal }: { onOpenProjectModal: () => void }) {
               hidden: {},
               visible: {
                 transition: {
-                  staggerChildren: 0.085,
-                  delayChildren: 0.12,
+                  staggerChildren: 0.045,
+                  delayChildren: 0.05,
                 },
               },
             }}
@@ -415,18 +409,17 @@ function Hero({ onOpenProjectModal }: { onOpenProjectModal: () => void }) {
               <motion.span
                 key={idx}
                 variants={{
-                  hidden: { opacity: 0, y: 24, filter: 'blur(6px)' },
+                  hidden: { opacity: 0, y: 16 },
                   visible: {
                     opacity: 1,
                     y: 0,
-                    filter: 'blur(0px)',
                     transition: {
-                      duration: 0.52,
+                      duration: 0.38,
                       ease: [0.16, 1, 0.3, 1],
                     },
                   },
                 }}
-                className="inline-block"
+                className="inline-block will-change-transform"
               >
                 {word}
               </motion.span>
@@ -435,25 +428,24 @@ function Hero({ onOpenProjectModal }: { onOpenProjectModal: () => void }) {
             {/* الكلمة الأخيرة بتدرج لوني وتأثير بروز خاص */}
             <motion.span
               variants={{
-                hidden: { opacity: 0, y: 24, scale: 0.9, filter: 'blur(8px)' },
+                hidden: { opacity: 0, y: 16, scale: 0.94 },
                 visible: {
                   opacity: 1,
                   y: 0,
                   scale: 1,
-                  filter: 'blur(0px)',
                   transition: {
-                    duration: 0.6,
+                    duration: 0.42,
                     ease: [0.16, 1, 0.3, 1],
                   },
                 },
               }}
-              className="inline-block bg-gradient-to-l from-[#3434d9] via-[#7c3aed] to-[#c084fc] bg-clip-text text-transparent"
+              className="inline-block bg-gradient-to-l from-[#3434d9] via-[#7c3aed] to-[#c084fc] bg-clip-text text-transparent will-change-transform"
             >
               {SITE_CONTENT.hero.titleHighlight}
             </motion.span>
           </motion.h1>
 
-          {/* ٣. النص الفرعي مع ظهور انسيابي متسلسل للكلمات */}
+          {/* ٣. النص الفرعي مع ظهور انسيابي سريع للكلمات */}
           <motion.p
             initial="hidden"
             animate="visible"
@@ -461,8 +453,8 @@ function Hero({ onOpenProjectModal }: { onOpenProjectModal: () => void }) {
               hidden: {},
               visible: {
                 transition: {
-                  staggerChildren: 0.025,
-                  delayChildren: 0.55,
+                  staggerChildren: 0.014,
+                  delayChildren: 0.22,
                 },
               },
             }}
@@ -472,13 +464,12 @@ function Hero({ onOpenProjectModal }: { onOpenProjectModal: () => void }) {
               <motion.span
                 key={idx}
                 variants={{
-                  hidden: { opacity: 0, y: 12, filter: 'blur(4px)' },
+                  hidden: { opacity: 0, y: 8 },
                   visible: {
                     opacity: 1,
                     y: 0,
-                    filter: 'blur(0px)',
                     transition: {
-                      duration: 0.38,
+                      duration: 0.28,
                       ease: 'easeOut',
                     },
                   },
@@ -490,11 +481,11 @@ function Hero({ onOpenProjectModal }: { onOpenProjectModal: () => void }) {
             ))}
           </motion.p>
 
-          {/* ٤. الأزرار الثلاثة تظهر بتتابع ناعم بعد اكتمال العنوان */}
+          {/* ٤. الأزرار الثلاثة تظهر بتتابع سريع */}
           <motion.div
-            initial={{ opacity: 0, y: 18 }}
+            initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.95, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.4, delay: 0.38, ease: [0.16, 1, 0.3, 1] }}
             className="mt-9 flex flex-col sm:flex-row items-center justify-center gap-4"
           >
             {/* ١. زر أساسي */}
@@ -533,7 +524,7 @@ function Hero({ onOpenProjectModal }: { onOpenProjectModal: () => void }) {
         {/* شريط الإحصائيات أسفل الأزرار */}
         <Stats />
       </div>
-    </motion.section>
+    </section>
   );
 }
 
@@ -657,11 +648,12 @@ function Features() {
 
 // ─────────────────────────────────────────────────────────────
 // ٥) قسم "كيف نعمل؟" (HowItWorks) — id="how"
-// يتضمن خطاً تفاعلياً بين الخطوات + ظهور تدريجي متتابع (Fade-up) عند التمرير
+// يتضمن وصلات مسار تفاعلية في الفراغات بين البطاقات فقط (دون قطع البطاقات)
 // ─────────────────────────────────────────────────────────────
 function HowItWorks() {
   const [isLineHovered, setIsLineHovered] = useState(false);
   const [hoveredStepIdx, setHoveredStepIdx] = useState<number | null>(null);
+  const totalSteps = SITE_CONTENT.howItWorks.steps.length;
 
   return (
     <motion.section
@@ -685,57 +677,16 @@ function HowItWorks() {
           </p>
         </motion.div>
 
-        {/* 4 خطوات أفقية مرقّمة متصلة بخط تفاعلي على الديسكتوب، وعمودية على الموبايل */}
+        {/* 4 خطوات أفقية مرقّمة متصلة بوصلات تفاعلية بين البطاقات فقط */}
         <motion.div
           variants={STAGGER_CONTAINER_VARIANTS}
           className="relative grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-8"
         >
-          {/* الخط الأفقي التفاعلي الواصل بين الخطوات على الديسكتوب */}
-          <div
-            onMouseEnter={() => setIsLineHovered(true)}
-            onMouseLeave={() => setIsLineHovered(false)}
-            title="مرّر هنا لتنشيط مسار العمل"
-            className="hidden lg:flex items-center absolute top-6 right-[8%] left-[8%] h-12 z-20 cursor-pointer group/line"
-          >
-            {/* المسار الأساسي للخط الواصل */}
-            <div
-              className={`w-full rounded-full transition-all duration-300 relative overflow-hidden ${
-                isLineHovered || hoveredStepIdx !== null
-                  ? 'h-[4px] bg-gradient-to-l from-[#3434d9] via-[#a855f7] to-[#3434d9] shadow-[0_0_20px_rgba(139,92,246,0.85)]'
-                  : 'h-[2px] bg-gradient-to-l from-[#3434d9] via-[#7c3aed] to-[#3434d9]/40'
-              }`}
-            >
-              {/* نبض ضوئي متحرك على طول الخط الواصل */}
-              <motion.div
-                animate={{ x: ['100%', '-100%'] }}
-                transition={{
-                  duration: isLineHovered ? 1.4 : 3.2,
-                  repeat: Infinity,
-                  ease: 'linear',
-                }}
-                className="w-1/3 h-full bg-gradient-to-l from-transparent via-white to-transparent opacity-80"
-              />
-            </div>
-          </div>
-
-          {/* الخط العمودي التفاعلي على الموبايل والتابلت */}
-          <div
-            onMouseEnter={() => setIsLineHovered(true)}
-            onMouseLeave={() => setIsLineHovered(false)}
-            className="lg:hidden absolute top-10 bottom-10 left-1/2 -translate-x-1/2 w-8 z-0 flex justify-center cursor-pointer"
-          >
-            <div
-              className={`h-full transition-all duration-300 rounded-full ${
-                isLineHovered
-                  ? 'w-[3px] bg-gradient-to-b from-[#3434d9] via-[#a855f7] to-[#3434d9] shadow-[0_0_16px_rgba(139,92,246,0.8)]'
-                  : 'w-[2px] bg-gradient-to-b from-[#3434d9]/60 via-[#7c3aed]/50 to-transparent'
-              }`}
-            />
-          </div>
-
           {SITE_CONTENT.howItWorks.steps.map((step, idx) => {
             const StepIcon = STEP_ICONS[step.iconName];
             const isCardTriggered = isLineHovered || hoveredStepIdx === idx;
+            const isConnectorActive =
+              isLineHovered || hoveredStepIdx === idx || hoveredStepIdx === idx + 1;
 
             return (
               <motion.div
@@ -743,19 +694,65 @@ function HowItWorks() {
                 variants={FADE_UP_ITEM_VARIANTS}
                 className="relative z-10 flex"
               >
+                {/* وصلة الخط الواصل التفاعلية في الفراغ بين البطاقة الحالية والبطاقة التالية فقط */}
+                {idx < totalSteps - 1 && (
+                  <>
+                    {/* الوصلة الأفقية على الديسكتوب (بين البطاقات فقط بعرض الفجوة 32px) */}
+                    <div
+                      onMouseEnter={() => setIsLineHovered(true)}
+                      onMouseLeave={() => setIsLineHovered(false)}
+                      title="مرّر هنا لتنشيط مسار العمل"
+                      className="hidden lg:flex items-center justify-center absolute top-1/2 -translate-y-1/2 -left-8 w-8 h-14 z-20 cursor-pointer"
+                    >
+                      <div
+                        className={`w-full rounded-full transition-all duration-300 relative flex items-center justify-center ${
+                          isConnectorActive
+                            ? 'h-[3px] bg-gradient-to-l from-[#3434d9] via-[#a855f7] to-[#3434d9] shadow-[0_0_14px_rgba(139,92,246,0.9)]'
+                            : 'h-[2px] bg-gradient-to-l from-[#3434d9]/75 via-[#8b5cf6]/80 to-[#3434d9]/75'
+                        }`}
+                      >
+                        {/* نقطة ضوئية في منتصف الفجوة بين البطاقتين */}
+                        <span
+                          className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                            isConnectorActive
+                              ? 'bg-white scale-125 shadow-[0_0_10px_#a855f7]'
+                              : 'bg-violet-400/80'
+                          }`}
+                        />
+                      </div>
+                    </div>
+
+                    {/* الوصلة العمودية على الموبايل والتابلت (بين البطاقات فقط بارتفاع الفجوة 24px) */}
+                    <div
+                      onMouseEnter={() => setIsLineHovered(true)}
+                      onMouseLeave={() => setIsLineHovered(false)}
+                      className="lg:hidden flex items-center justify-center absolute -bottom-6 left-1/2 -translate-x-1/2 w-12 h-6 z-20 cursor-pointer"
+                    >
+                      <div
+                        className={`h-full rounded-full transition-all duration-300 flex items-center justify-center ${
+                          isConnectorActive
+                            ? 'w-[3px] bg-gradient-to-b from-[#3434d9] via-[#a855f7] to-[#3434d9] shadow-[0_0_12px_rgba(139,92,246,0.85)]'
+                            : 'w-[2px] bg-gradient-to-b from-[#3434d9]/70 via-[#8b5cf6]/75 to-[#3434d9]/70'
+                        }`}
+                      >
+                        <span className="w-1.5 h-1.5 rounded-full bg-violet-400" />
+                      </div>
+                    </div>
+                  </>
+                )}
+
                 <motion.div
                   animate={
                     isLineHovered
                       ? {
-                          scale: 1.035,
-                          y: -5,
-                          rotate: [0, -0.8, 0.8, -0.4, 0],
+                          scale: 1.03,
+                          y: -4,
+                          rotate: [0, -0.6, 0.6, 0],
                         }
                       : hoveredStepIdx === idx
                         ? {
-                            scale: 1.03,
-                            y: -5,
-                            rotate: [0, -0.6, 0.6, 0],
+                            scale: 1.025,
+                            y: -4,
                           }
                         : {
                             scale: 1,
@@ -764,8 +761,8 @@ function HowItWorks() {
                           }
                   }
                   transition={{
-                    duration: 0.35,
-                    delay: isLineHovered ? idx * 0.04 : 0,
+                    duration: 0.3,
+                    delay: isLineHovered ? idx * 0.03 : 0,
                     ease: 'easeOut',
                   }}
                   onMouseEnter={() => setHoveredStepIdx(idx)}
@@ -789,13 +786,13 @@ function HowItWorks() {
                     animate={
                       isCardTriggered
                         ? {
-                            scale: [1, 1.12, 1.06],
-                            rotate: [0, -5, 5, 0],
+                            scale: [1, 1.1, 1.05],
+                            rotate: [0, -4, 4, 0],
                           }
                         : { scale: 1, rotate: 0 }
                     }
-                    transition={{ duration: 0.35 }}
-                    className="relative z-20 mb-5"
+                    transition={{ duration: 0.3 }}
+                    className="relative z-10 mb-5"
                   >
                     <div
                       className={`w-15 h-15 rounded-2xl bg-gradient-to-br from-[#3434d9] to-[#8b5cf6] text-white flex items-center justify-center shadow-lg border-4 border-[#0b0b14] transition-all duration-200 ${
@@ -1787,56 +1784,50 @@ function SectionsSkeleton() {
 }
 
 // ─────────────────────────────────────────────────────────────
-// خلفية نقوش هندسية ورسوم ووسوم متحركة كصفحات الهبوط الاحترافية
+// خلفية نقوش هندسية ورسوم ووسوم متحركة صغيرة وهادئة وعالية الأداء
 // ─────────────────────────────────────────────────────────────
 const FLOATING_BADGES = [
   {
     label: '< API />',
-    top: '13%',
-    left: '4%',
+    top: '15%',
+    left: '3%',
     delay: 0,
-    duration: 5.5,
-    hideOnMobile: false,
+    duration: 7,
   },
   {
     label: '{ USDT }',
-    top: '21%',
-    right: '4%',
-    delay: 0.8,
-    duration: 6.2,
-    hideOnMobile: false,
+    top: '23%',
+    right: '3%',
+    delay: 1,
+    duration: 8,
   },
   {
     label: 'Sʜᴀᴅᴏᴡ𝐗',
-    top: '44%',
-    left: '3%',
-    delay: 0.4,
-    duration: 6.8,
-    hideOnMobile: true,
+    top: '48%',
+    left: '2.5%',
+    delay: 0.5,
+    duration: 8.5,
   },
   {
-    label: '⚡ أتمتة ١٠٠٪',
-    top: '54%',
-    right: '4%',
-    delay: 1.1,
-    duration: 5.8,
-    hideOnMobile: false,
+    label: '⚡ ١٠٠٪',
+    top: '56%',
+    right: '3%',
+    delay: 1.4,
+    duration: 7.5,
   },
   {
     label: 'Binance Pay',
-    top: '74%',
-    left: '5%',
-    delay: 0.6,
-    duration: 6.5,
-    hideOnMobile: false,
+    top: '76%',
+    left: '3.5%',
+    delay: 0.8,
+    duration: 8.2,
   },
   {
     label: '٢٤/٧',
-    top: '83%',
-    right: '5%',
-    delay: 1.4,
-    duration: 5.4,
-    hideOnMobile: false,
+    top: '84%',
+    right: '3.5%',
+    delay: 1.8,
+    duration: 7.2,
   },
 ];
 
@@ -1844,61 +1835,61 @@ const GEOMETRIC_SHAPES = [
   {
     id: 'hex-top-right',
     type: 'hexagon',
-    top: '11%',
-    right: '14%',
-    size: 'w-16 h-16 sm:w-24 sm:h-24',
-    duration: 14,
-    floatDuration: 5.5,
+    top: '12%',
+    right: '8%',
+    size: 'w-5 h-5 sm:w-8 sm:h-8',
+    duration: 18,
+    floatDuration: 6.5,
     delay: 0,
   },
   {
     id: 'ring-top-left',
     type: 'orbit-ring',
-    top: '18%',
-    left: '12%',
-    size: 'w-20 h-20 sm:w-28 sm:h-28',
-    duration: 18,
-    floatDuration: 6.5,
+    top: '19%',
+    left: '8%',
+    size: 'w-6 h-6 sm:w-9 sm:h-9',
+    duration: 22,
+    floatDuration: 7.5,
     delay: 0.5,
   },
   {
     id: 'diamond-mid-right',
     type: 'diamond',
-    top: '38%',
-    right: '9%',
-    size: 'w-14 h-14 sm:w-20 sm:h-20',
-    duration: 12,
-    floatDuration: 5,
+    top: '40%',
+    right: '6%',
+    size: 'w-5 h-5 sm:w-7 sm:h-7',
+    duration: 16,
+    floatDuration: 6,
     delay: 1,
   },
   {
     id: 'hex-mid-left',
     type: 'hexagon',
-    top: '62%',
-    left: '10%',
-    size: 'w-16 h-16 sm:w-24 sm:h-24',
-    duration: 16,
-    floatDuration: 6,
+    top: '63%',
+    left: '7%',
+    size: 'w-5 h-5 sm:w-8 sm:h-8',
+    duration: 20,
+    floatDuration: 7,
     delay: 0.3,
   },
   {
     id: 'ring-bottom-right',
     type: 'orbit-ring',
-    top: '70%',
-    right: '13%',
-    size: 'w-20 h-20 sm:w-28 sm:h-28',
-    duration: 20,
-    floatDuration: 7,
+    top: '72%',
+    right: '8%',
+    size: 'w-6 h-6 sm:w-9 sm:h-9',
+    duration: 24,
+    floatDuration: 8,
     delay: 0.9,
   },
   {
     id: 'diamond-bottom-left',
     type: 'diamond',
-    top: '86%',
-    left: '16%',
-    size: 'w-12 h-12 sm:w-16 sm:h-16',
-    duration: 13,
-    floatDuration: 5.2,
+    top: '87%',
+    left: '9%',
+    size: 'w-4 h-4 sm:w-6 sm:h-6',
+    duration: 17,
+    floatDuration: 6.2,
     delay: 1.4,
   },
 ];
@@ -1909,115 +1900,57 @@ function AnimatedLandingBackground() {
       aria-hidden="true"
       className="pointer-events-none fixed inset-0 z-0 overflow-hidden select-none"
     >
-      {/* ١. شبكة هندسية معمارية متحركة باستمرار (Panning Architectural Grid) */}
-      <div className="absolute inset-0 bg-architectural-grid opacity-95" />
+      {/* ١. شبكة هندسية معمارية خفيفة */}
+      <div className="absolute inset-0 bg-architectural-grid opacity-75" />
 
-      {/* ٢. مصفوفة نقاط دقيقة متحركة بالاتجاه المعاكس (Drifting Dot Matrix) */}
-      <div className="absolute inset-0 bg-dot-matrix opacity-70" />
+      {/* ٢. مصفوفة نقاط دقيقة */}
+      <div className="absolute inset-0 bg-dot-matrix opacity-45" />
 
-      {/* ٣. نبضات ضوئية سريعة تسري على خطوط الشبكة أفقياً وعمودياً (Cyber Grid Light Beams) */}
-      <motion.div
-        animate={{ x: ['-25vw', '125vw'] }}
-        transition={{ duration: 6.5, repeat: Infinity, ease: 'linear' }}
-        className="absolute top-[22%] left-0 w-44 sm:w-72 h-[2px] bg-gradient-to-r from-transparent via-[#8b5cf6] to-transparent shadow-[0_0_16px_#8b5cf6] opacity-75"
-      />
-      <motion.div
-        animate={{ x: ['125vw', '-25vw'] }}
-        transition={{ duration: 8, repeat: Infinity, ease: 'linear', delay: 1.8 }}
-        className="absolute top-[58%] left-0 w-48 sm:w-80 h-[2px] bg-gradient-to-r from-transparent via-[#3434d9] to-transparent shadow-[0_0_18px_#3434d9] opacity-75"
-      />
-      <motion.div
-        animate={{ x: ['-25vw', '125vw'] }}
-        transition={{ duration: 7.2, repeat: Infinity, ease: 'linear', delay: 3.2 }}
-        className="absolute top-[84%] left-0 w-40 sm:w-64 h-[2px] bg-gradient-to-r from-transparent via-violet-400 to-transparent shadow-[0_0_14px_#a78bfa] opacity-65"
-      />
-      <motion.div
-        animate={{ y: ['-25vh', '125vh'] }}
-        transition={{ duration: 7.5, repeat: Infinity, ease: 'linear', delay: 0.7 }}
-        className="absolute top-0 left-[18%] w-[2px] h-44 sm:h-64 bg-gradient-to-b from-transparent via-[#8b5cf6] to-transparent shadow-[0_0_16px_#8b5cf6] opacity-60"
-      />
-      <motion.div
-        animate={{ y: ['125vh', '-25vh'] }}
-        transition={{ duration: 9, repeat: Infinity, ease: 'linear', delay: 2.4 }}
-        className="absolute top-0 right-[18%] w-[2px] h-48 sm:h-72 bg-gradient-to-b from-transparent via-[#3434d9] to-transparent shadow-[0_0_16px_#3434d9] opacity-60"
-      />
+      {/* ٣. هالات ضوئية ثابتة خفيفة على المعالج الرسومي */}
+      <div className="
+        absolute -top-28 -right-28 w-72 sm:w-96 h-72 sm:h-96 rounded-full
+        bg-gradient-to-br from-[#3434d9]/16 via-[#8b5cf6]/10 to-transparent blur-3xl
+      " />
+      <div className="
+        absolute top-[42%] -left-28 w-72 sm:w-96 h-72 sm:h-96 rounded-full
+        bg-gradient-to-tr from-[#6d28d9]/14 via-[#3434d9]/10 to-transparent blur-3xl
+      " />
 
-      {/* ٤. هالات ضوئية متحركة في الخلفية */}
-      <motion.div
-        animate={{
-          x: [0, 65, -45, 0],
-          y: [0, -55, 40, 0],
-          scale: [1, 1.15, 0.92, 1],
-        }}
-        transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
-        className="absolute -top-24 -right-24 w-[380px] sm:w-[500px] h-[380px] sm:h-[500px] rounded-full bg-gradient-to-br from-[#3434d9]/25 via-[#8b5cf6]/18 to-transparent blur-[115px]"
-      />
-      <motion.div
-        animate={{
-          x: [0, -60, 45, 0],
-          y: [0, 55, -40, 0],
-          scale: [1, 0.9, 1.12, 1],
-        }}
-        transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
-        className="absolute top-[40%] -left-32 w-[400px] sm:w-[520px] h-[400px] sm:h-[520px] rounded-full bg-gradient-to-tr from-[#6d28d9]/22 via-[#3434d9]/14 to-transparent blur-[125px]"
-      />
-
-      {/* ٥. مسارات ومنحنيات هندسية متوهجة متحركة (Animated Vector Waves) */}
+      {/* ٤. مسارات منحنية هندسية رفيعة وهادئة */}
       <svg
-        className="absolute inset-0 w-full h-full opacity-65"
+        className="hidden sm:block absolute inset-0 w-full h-full opacity-25"
         viewBox="0 0 1440 900"
         fill="none"
         preserveAspectRatio="xMidYMid slice"
       >
         <defs>
           <linearGradient id="shadowx-line-grad-1" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#3434d9" stopOpacity="0.1" />
-            <stop offset="50%" stopColor="#a855f7" stopOpacity="0.85" />
-            <stop offset="100%" stopColor="#3434d9" stopOpacity="0.1" />
+            <stop offset="0%" stopColor="#3434d9" stopOpacity="0" />
+            <stop offset="50%" stopColor="#8b5cf6" stopOpacity="0.55" />
+            <stop offset="100%" stopColor="#3434d9" stopOpacity="0" />
           </linearGradient>
           <linearGradient id="shadowx-line-grad-2" x1="100%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#8b5cf6" stopOpacity="0.1" />
-            <stop offset="50%" stopColor="#3434d9" stopOpacity="0.8" />
-            <stop offset="100%" stopColor="#c084fc" stopOpacity="0.1" />
+            <stop offset="0%" stopColor="#8b5cf6" stopOpacity="0" />
+            <stop offset="50%" stopColor="#3434d9" stopOpacity="0.45" />
+            <stop offset="100%" stopColor="#8b5cf6" stopOpacity="0" />
           </linearGradient>
         </defs>
 
-        <motion.path
+        <path
           d="M-100 190 C 320 50, 580 350, 1020 150 C 1240 60, 1400 230, 1560 130"
           stroke="url(#shadowx-line-grad-1)"
-          strokeWidth="2"
-          strokeDasharray="12 10"
-          animate={{
-            strokeDashoffset: [0, -220],
-            y: [0, -18, 0],
-            opacity: [0.45, 0.85, 0.45],
-          }}
-          transition={{
-            strokeDashoffset: { duration: 6, repeat: Infinity, ease: 'linear' },
-            y: { duration: 7, repeat: Infinity, ease: 'easeInOut' },
-            opacity: { duration: 5, repeat: Infinity, ease: 'easeInOut' },
-          }}
+          strokeWidth="1.2"
+          strokeDasharray="8 8"
         />
-
-        <motion.path
+        <path
           d="M-80 670 C 340 500, 760 830, 1140 600 C 1310 510, 1420 680, 1540 580"
           stroke="url(#shadowx-line-grad-2)"
-          strokeWidth="2"
-          strokeDasharray="14 12"
-          animate={{
-            strokeDashoffset: [0, 240],
-            y: [0, 20, 0],
-            opacity: [0.4, 0.8, 0.4],
-          }}
-          transition={{
-            strokeDashoffset: { duration: 7, repeat: Infinity, ease: 'linear' },
-            y: { duration: 8, repeat: Infinity, ease: 'easeInOut' },
-            opacity: { duration: 6, repeat: Infinity, ease: 'easeInOut' },
-          }}
+          strokeWidth="1.2"
+          strokeDasharray="10 10"
         />
       </svg>
 
-      {/* ٦. عناصر وأشكال هندسية ثلاثية وثنائية الأبعاد تدور وتطفو باستمرار (جميع الشاشات) */}
+      {/* ٥. أشكال هندسية صغيرة جداً وهادئة تدور وتطفو بنعومة */}
       {GEOMETRIC_SHAPES.map((shape) => (
         <motion.div
           key={shape.id}
@@ -2027,8 +1960,7 @@ function AnimatedLandingBackground() {
             right: shape.right,
           }}
           animate={{
-            y: [0, -30, 0],
-            x: [0, 14, -10, 0],
+            y: [0, -12, 0],
           }}
           transition={{
             duration: shape.floatDuration,
@@ -2036,12 +1968,12 @@ function AnimatedLandingBackground() {
             repeat: Infinity,
             ease: 'easeInOut',
           }}
-          className={`absolute ${shape.size} flex items-center justify-center opacity-70 sm:opacity-85`}
+          className={`absolute ${shape.size} flex items-center justify-center opacity-20 sm:opacity-30 will-change-transform`}
         >
           {shape.type === 'hexagon' && (
             <motion.svg
               viewBox="0 0 100 100"
-              className="w-full h-full overflow-visible drop-shadow-[0_0_12px_rgba(139,92,246,0.45)]"
+              className="w-full h-full overflow-visible"
               animate={{ rotate: 360 }}
               transition={{
                 duration: shape.duration,
@@ -2050,21 +1982,13 @@ function AnimatedLandingBackground() {
               }}
             >
               <polygon
-                points="50,6 90,28 90,72 50,94 10,72 10,28"
-                fill="rgba(52, 52, 217, 0.08)"
+                points="50,8 88,30 88,70 50,92 12,70 12,30"
+                fill="none"
                 stroke="#8b5cf6"
                 strokeWidth="2"
                 strokeOpacity="0.65"
               />
-              <polygon
-                points="50,22 76,36 76,64 50,78 24,64 24,36"
-                fill="none"
-                stroke="#c084fc"
-                strokeWidth="1.2"
-                strokeDasharray="4 4"
-                strokeOpacity="0.55"
-              />
-              <circle cx="50" cy="50" r="4" fill="#a855f7" fillOpacity="0.8" />
+              <circle cx="50" cy="50" r="4" fill="#a855f7" fillOpacity="0.6" />
             </motion.svg>
           )}
 
@@ -2077,56 +2001,28 @@ function AnimatedLandingBackground() {
                   repeat: Infinity,
                   ease: 'linear',
                 }}
-                className="absolute inset-0 rounded-full border-2 border-dashed border-violet-400/50 shadow-[0_0_20px_rgba(139,92,246,0.25)]"
+                className="absolute inset-0 rounded-full border border-dashed border-violet-400/50"
               />
-              <motion.div
-                animate={{ rotate: -360, scale: [0.92, 1.08, 0.92] }}
-                transition={{
-                  rotate: {
-                    duration: shape.duration * 0.7,
-                    repeat: Infinity,
-                    ease: 'linear',
-                  },
-                  scale: {
-                    duration: 3.5,
-                    repeat: Infinity,
-                    ease: 'easeInOut',
-                  },
-                }}
-                className="w-3/5 h-3/5 rounded-full border border-[#3434d9]/70 bg-[#3434d9]/10 flex items-center justify-center"
-              >
-                <div className="w-2.5 h-2.5 rounded-full bg-violet-400 shadow-[0_0_10px_#a855f7]" />
-              </motion.div>
+              <div className="w-1.5 h-1.5 rounded-full bg-violet-400/70" />
             </div>
           )}
 
           {shape.type === 'diamond' && (
-            <div className="relative w-full h-full flex items-center justify-center">
-              <motion.div
-                animate={{ rotate: [45, 405] }}
-                transition={{
-                  duration: shape.duration,
-                  repeat: Infinity,
-                  ease: 'linear',
-                }}
-                className="w-4/5 h-4/5 rounded-xl border-2 border-violet-400/55 bg-gradient-to-br from-[#3434d9]/15 to-[#8b5cf6]/10 shadow-[0_0_18px_rgba(52,52,217,0.35)]"
-              />
-              <motion.div
-                animate={{ rotate: [405, 45] }}
-                transition={{
-                  duration: shape.duration * 0.8,
-                  repeat: Infinity,
-                  ease: 'linear',
-                }}
-                className="absolute w-1/2 h-1/2 rounded-lg border border-dashed border-violet-300/60"
-              />
-            </div>
+            <motion.div
+              animate={{ rotate: [45, 405] }}
+              transition={{
+                duration: shape.duration,
+                repeat: Infinity,
+                ease: 'linear',
+              }}
+              className="w-4/5 h-4/5 rounded-md border border-violet-400/50 bg-[#3434d9]/10"
+            />
           )}
         </motion.div>
       ))}
 
-      {/* ٧. وسوم ورموز برمجية زجاجية متحركة (Floating Tech Tags) على الموبايل والديسكتوب */}
-      <div>
+      {/* ٦. وسوم برمجية صغيرة وهادئة في الأطراف */}
+      <div className="hidden md:block">
         {FLOATING_BADGES.map((badge, idx) => (
           <motion.div
             key={idx}
@@ -2136,10 +2032,8 @@ function AnimatedLandingBackground() {
               right: badge.right,
             }}
             animate={{
-              y: [0, -22, 0],
-              x: [0, idx % 2 === 0 ? 12 : -12, 0],
-              rotate: [-3, 3, -3],
-              opacity: [0.55, 0.92, 0.55],
+              y: [0, -10, 0],
+              opacity: [0.22, 0.4, 0.22],
             }}
             transition={{
               duration: badge.duration,
@@ -2147,9 +2041,7 @@ function AnimatedLandingBackground() {
               repeat: Infinity,
               ease: 'easeInOut',
             }}
-            className={`${
-              badge.hideOnMobile ? 'hidden sm:inline-flex' : 'inline-flex'
-            } absolute px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-2xl bg-[#14141f]/80 backdrop-blur-md border border-violet-400/35 shadow-[0_0_20px_rgba(139,92,246,0.22)] text-[10px] sm:text-xs font-mono font-bold text-violet-200 tracking-wider`}
+            className="absolute px-2 py-0.5 rounded-lg bg-[#14141f]/60 border border-violet-400/20 text-[10px] font-mono font-medium text-violet-300/75 tracking-wider will-change-transform"
           >
             <span dir="ltr">{badge.label}</span>
           </motion.div>
@@ -2162,7 +2054,6 @@ function AnimatedLandingBackground() {
 // ─────────────────────────────────────────────────────────────
 // التطبيق الرئيسي (App) — يجمع الأقسام بالترتيب المطلوب بالضبط:
 // Navbar -> Hero (+ Stats) -> Features -> HowItWorks -> Payments -> FAQ -> FinalCTA -> Footer
-// مع عرض Skeleton Loading بنبض ناعم عند فتح الموقع لأول مرة
 // ─────────────────────────────────────────────────────────────
 export default function App() {
   const [projectModalOpen, setProjectModalOpen] = useState(false);
@@ -2172,7 +2063,7 @@ export default function App() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsInitialLoading(false);
-    }, 850);
+    }, 280);
     return () => clearTimeout(timer);
   }, []);
 
@@ -2186,26 +2077,18 @@ export default function App() {
 
       <Navbar onOpenProjectModal={() => setProjectModalOpen(true)} />
 
-      <AnimatePresence mode="wait">
-        {isInitialLoading ? (
-          <SectionsSkeleton />
-        ) : (
-          <motion.main
-            key="main-content"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.35 }}
-            className="relative z-10 flex-1"
-          >
-            <Hero onOpenProjectModal={() => setProjectModalOpen(true)} />
-            <Features />
-            <HowItWorks />
-            <Payments />
-            <FAQ />
-            <FinalCTA onOpenProjectModal={() => setProjectModalOpen(true)} />
-          </motion.main>
-        )}
-      </AnimatePresence>
+      {isInitialLoading ? (
+        <SectionsSkeleton />
+      ) : (
+        <main className="relative z-10 flex-1">
+          <Hero onOpenProjectModal={() => setProjectModalOpen(true)} />
+          <Features />
+          <HowItWorks />
+          <Payments />
+          <FAQ />
+          <FinalCTA onOpenProjectModal={() => setProjectModalOpen(true)} />
+        </main>
+      )}
 
       <div className="relative z-10">
         <Footer onOpenInfoModal={(key) => setInfoModalKey(key)} />
