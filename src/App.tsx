@@ -35,7 +35,7 @@ import {
   Sparkles,
   ArrowLeft,
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence, useScroll, useSpring } from 'motion/react';
 import {
   STATS_DATA,
   SITE_CONTENT,
@@ -113,8 +113,33 @@ function IconBadge({
 }
 
 // ─────────────────────────────────────────────────────────────
+// شريط تقدم التمرير العلوي (Scroll Progress Bar)
+// يمتلئ بالتدرج اللوني الأساسي كلما مرّر المستخدم لأسفل الصفحة
+// ─────────────────────────────────────────────────────────────
+function ScrollProgressBar() {
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 120,
+    damping: 28,
+    restDelta: 0.001,
+  });
+
+  return (
+    <div
+      aria-hidden="true"
+      className="pointer-events-none fixed top-0 inset-x-0 z-50 h-[3px] bg-white/[0.03]"
+    >
+      <motion.div
+        style={{ scaleX }}
+        className="h-full w-full origin-right bg-gradient-to-l from-[#3434d9] via-[#7c3aed] to-[#c084fc] shadow-[0_0_12px_rgba(139,92,246,0.85)]"
+      />
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
 // مكوّن الشعار الموحّد (BrandLogo)
-// يعرض صورة الاسم بالكامل (SHADOWX) كشعار رئيسي للموقع
+// يعرض صورة الاسم بالكامل (SHADOWX) كشعار رئيسي للموقع (بمحاذاة دقيقة داخل h-14 على الموبايل)
 // ─────────────────────────────────────────────────────────────
 function BrandLogo() {
   const [wordmarkError, setWordmarkError] = useState(false);
@@ -123,22 +148,22 @@ function BrandLogo() {
     <a
       href="#"
       aria-label="العودة إلى أعلى صفحة ShadowX"
-      className="inline-flex items-center gap-2.5 whitespace-nowrap shrink-0 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8b5cf6] rounded-2xl"
+      className="inline-flex items-center justify-center h-9 sm:h-12 whitespace-nowrap shrink-0 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8b5cf6] rounded-xl sm:rounded-2xl"
     >
       {!wordmarkError ? (
-        <div className="h-11 sm:h-12 w-36 sm:w-44 flex items-center justify-center overflow-hidden">
+        <div className="h-7 sm:h-11 w-25 sm:w-42 flex items-center justify-center overflow-hidden">
           <img
             src={SITE_CONTENT.brand.wordmarkLogo}
             alt={SITE_CONTENT.brand.name}
             referrerPolicy="no-referrer"
             onError={() => setWordmarkError(true)}
-            className="w-full h-full object-cover object-center scale-125 transition-transform duration-200 group-hover:scale-[1.32]"
+            className="w-full h-full object-cover object-center scale-[1.22] sm:scale-125 transition-transform duration-200 group-hover:scale-[1.3]"
           />
         </div>
       ) : (
         <span
           dir="ltr"
-          className="font-display font-extrabold text-xl tracking-tight text-white group-hover:text-violet-200 transition-colors"
+          className="font-display font-extrabold text-base sm:text-xl leading-none tracking-tight text-white group-hover:text-violet-200 transition-colors"
         >
           Sʜᴀᴅᴏᴡ<span className="text-[#8b5cf6]">𝐗</span>
         </span>
@@ -149,7 +174,7 @@ function BrandLogo() {
 
 // ─────────────────────────────────────────────────────────────
 // ١) شريط التنقل (Navbar) — ثابت (sticky) بخلفية زجاجية blur
-// تم نقل الشعار إلى الجهة المقابلة مكان زر القائمة الجانبية وزر ابدأ
+// مضبوط بارتفاع 14 وحدة (h-14 / 56px) على الموبايل مع محاذاة مركزية مثالية للعناصر
 // ─────────────────────────────────────────────────────────────
 function Navbar({ onOpenProjectModal }: { onOpenProjectModal: () => void }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -166,27 +191,27 @@ function Navbar({ onOpenProjectModal }: { onOpenProjectModal: () => void }) {
   }, [mobileMenuOpen]);
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-[#0b0b14]/80 backdrop-blur-xl border-b border-white/[0.08]">
-      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 h-20 flex items-center justify-between gap-8">
+    <header className="sticky top-0 z-40 w-full bg-[#0b0b14]/85 backdrop-blur-xl border-b border-white/[0.08]">
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 h-14 sm:h-20 flex items-center justify-between gap-3 sm:gap-8">
         {/* الجهة الأولى (يميناً): زر القائمة الجانبية للموبايل + زر "ابدأ مشروعك" */}
-        <div className="flex items-center gap-3 shrink-0">
+        <div className="flex items-center gap-2 sm:gap-3 h-full shrink-0">
           <button
             type="button"
             onClick={() => setMobileMenuOpen((prev) => !prev)}
             aria-expanded={mobileMenuOpen}
             aria-controls="mobile-nav-menu"
             aria-label={SITE_CONTENT.navbar.mobileMenuAriaLabel}
-            className="md:hidden inline-flex items-center justify-center w-11 h-11 rounded-2xl bg-[#14141f] border border-white/[0.08] text-slate-200 hover:text-white hover:border-violet-500/40 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
+            className="md:hidden inline-flex items-center justify-center w-9 h-9 rounded-xl bg-[#14141f] border border-white/[0.08] text-slate-200 hover:text-white hover:border-violet-500/40 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
           >
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {mobileMenuOpen ? <X className="w-4 h-4 stroke-[2.2]" /> : <Menu className="w-4 h-4 stroke-[2.2]" />}
           </button>
 
           <button
             type="button"
             onClick={onOpenProjectModal}
-            className="hidden sm:inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-2xl font-bold text-sm text-white bg-gradient-to-l from-[#3434d9] to-[#7c3aed] hover:from-[#3e3ee8] hover:to-[#8b5cf6] shadow-lg shadow-[#3434d9]/30 transition-all duration-200 hover:-translate-y-0.5 whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
+            className="inline-flex items-center justify-center gap-1.5 sm:gap-2 h-9 sm:h-auto px-3.5 sm:px-5 sm:py-2.5 rounded-xl sm:rounded-2xl font-bold text-xs sm:text-sm leading-none text-white bg-gradient-to-l from-[#3434d9] to-[#7c3aed] hover:from-[#3e3ee8] hover:to-[#8b5cf6] shadow-md sm:shadow-lg shadow-[#3434d9]/30 transition-all duration-200 hover:-translate-y-0.5 whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
           >
-            <Rocket className="w-4 h-4 stroke-[2]" />
+            <Rocket className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2] shrink-0" />
             <span>{SITE_CONTENT.navbar.ctaText}</span>
           </button>
         </div>
@@ -194,21 +219,23 @@ function Navbar({ onOpenProjectModal }: { onOpenProjectModal: () => void }) {
         {/* وسط: روابط تمرير سلس */}
         <nav
           aria-label="التنقل الرئيسي"
-          className="hidden md:flex items-center gap-8 text-base font-medium text-slate-300"
+          className="hidden md:flex items-center gap-8 text-base font-medium text-slate-300 h-full"
         >
           {SITE_CONTENT.navbar.links.map((link) => (
             <a
               key={link.href}
               href={link.href}
-              className="whitespace-nowrap shrink-0 py-1 hover:text-white relative after:content-[''] after:absolute after:bottom-0 after:right-0 after:w-0 after:h-[2px] after:bg-gradient-to-l after:from-[#3434d9] after:to-[#8b5cf6] hover:after:w-full after:transition-all after:duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8b5cf6] rounded"
+              className="inline-flex items-center whitespace-nowrap shrink-0 py-1 hover:text-white relative after:content-[''] after:absolute after:bottom-0 after:right-0 after:w-0 after:h-[2px] after:bg-gradient-to-l after:from-[#3434d9] after:to-[#8b5cf6] hover:after:w-full after:transition-all after:duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8b5cf6] rounded"
             >
               {link.label}
             </a>
           ))}
         </nav>
 
-        {/* الجهة المقابلة (يساراً): الشعار */}
-        <BrandLogo />
+        {/* الجهة المقابلة (يساراً): الشعار بمحاذاة عمودية متكافئة */}
+        <div className="flex items-center h-full shrink-0">
+          <BrandLogo />
+        </div>
       </div>
 
       {/* القائمة المنسدلة للموبايل */}
@@ -220,15 +247,15 @@ function Navbar({ onOpenProjectModal }: { onOpenProjectModal: () => void }) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.16 }}
-            className="md:hidden bg-[#14141f]/95 backdrop-blur-xl border-b border-white/[0.08] px-4 pt-3 pb-6"
+            className="md:hidden bg-[#14141f]/95 backdrop-blur-xl border-b border-white/[0.08] px-4 pt-2.5 pb-5"
           >
-            <nav aria-label="قائمة الموبايل" className="flex flex-col gap-2">
+            <nav aria-label="قائمة الموبايل" className="flex flex-col gap-1.5">
               {SITE_CONTENT.navbar.links.map((link) => (
                 <a
                   key={link.href}
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="px-4 py-3 rounded-2xl text-base font-medium text-slate-200 hover:text-white hover:bg-white/[0.05] transition-colors"
+                  className="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-200 hover:text-white hover:bg-white/[0.05] transition-colors"
                 >
                   {link.label}
                 </a>
@@ -239,7 +266,7 @@ function Navbar({ onOpenProjectModal }: { onOpenProjectModal: () => void }) {
                   setMobileMenuOpen(false);
                   onOpenProjectModal();
                 }}
-                className="mt-2 w-full py-3.5 px-5 rounded-2xl font-bold text-center text-white bg-gradient-to-l from-[#3434d9] to-[#7c3aed] shadow-lg shadow-[#3434d9]/30 cursor-pointer flex items-center justify-center gap-2"
+                className="mt-2 w-full py-3 px-5 rounded-xl font-bold text-sm text-center text-white bg-gradient-to-l from-[#3434d9] to-[#7c3aed] shadow-lg shadow-[#3434d9]/30 cursor-pointer flex items-center justify-center gap-2"
               >
                 <Rocket className="w-4 h-4" />
                 <span>{SITE_CONTENT.navbar.ctaText}</span>
@@ -291,8 +318,11 @@ function Stats() {
 }
 
 // ─────────────────────────────────────────────────────────────
-// ٣) قسم البطل (Hero)
+// ٣) قسم البطل (Hero) — مع تأثير ظهور انسيابي للكلمات (Reveal Animation)
 // ─────────────────────────────────────────────────────────────
+const heroTitleWords = SITE_CONTENT.hero.titlePrefix.split(' ');
+const heroSubtitleWords = SITE_CONTENT.hero.subtitle.split(' ');
+
 function Hero({ onOpenProjectModal }: { onOpenProjectModal: () => void }) {
   return (
     <section className="relative pt-14 pb-20 sm:pt-20 sm:pb-28 overflow-hidden">
@@ -303,36 +333,120 @@ function Hero({ onOpenProjectModal }: { onOpenProjectModal: () => void }) {
       />
 
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="max-w-4xl mx-auto text-center"
-        >
-          {/* شارة صغيرة أعلى العنوان */}
-          <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-2xl bg-[#14141f] border border-white/[0.08] text-violet-300 text-sm font-medium mb-7 shadow-sm">
+        <div className="max-w-4xl mx-auto text-center">
+          {/* ١. شارة صغيرة أعلى العنوان مع حركة كشف ناعمة */}
+          <motion.div
+            initial={{ opacity: 0, y: -14, scale: 0.94, filter: 'blur(4px)' }}
+            animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
+            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            className="inline-flex items-center gap-2.5 px-4 py-2 rounded-2xl bg-[#14141f] border border-white/[0.08] text-violet-300 text-sm font-medium mb-7 shadow-sm"
+          >
             <Sparkles className="w-4 h-4 text-[#8b5cf6] shrink-0" />
             <span>{SITE_CONTENT.hero.badge}</span>
-          </div>
+          </motion.div>
 
-          {/* العنوان الرئيسي H1 ضخم مع تدرج لوني على الكلمة الأخيرة */}
-          <h1
+          {/* ٢. العنوان الرئيسي H1 ضخم مع ظهور متدرج للكلمات (Staggered Word Reveal) */}
+          <motion.h1
+            initial="hidden"
+            animate="visible"
+            variants={{
+              hidden: {},
+              visible: {
+                transition: {
+                  staggerChildren: 0.085,
+                  delayChildren: 0.12,
+                },
+              },
+            }}
             style={{ textWrap: 'balance' }}
-            className="font-display font-extrabold text-3xl sm:text-5xl lg:text-6xl leading-[1.22] tracking-tight text-white"
+            className="font-display font-extrabold text-3xl sm:text-5xl lg:text-6xl leading-[1.26] tracking-tight text-white flex flex-wrap items-center justify-center gap-x-2.5 sm:gap-x-3.5 gap-y-2"
           >
-            {SITE_CONTENT.hero.titlePrefix}{' '}
-            <span className="bg-gradient-to-l from-[#3434d9] via-[#7c3aed] to-[#c084fc] bg-clip-text text-transparent">
+            {heroTitleWords.map((word, idx) => (
+              <motion.span
+                key={idx}
+                variants={{
+                  hidden: { opacity: 0, y: 24, filter: 'blur(6px)' },
+                  visible: {
+                    opacity: 1,
+                    y: 0,
+                    filter: 'blur(0px)',
+                    transition: {
+                      duration: 0.52,
+                      ease: [0.16, 1, 0.3, 1],
+                    },
+                  },
+                }}
+                className="inline-block"
+              >
+                {word}
+              </motion.span>
+            ))}
+
+            {/* الكلمة الأخيرة بتدرج لوني وتأثير بروز خاص */}
+            <motion.span
+              variants={{
+                hidden: { opacity: 0, y: 24, scale: 0.9, filter: 'blur(8px)' },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  scale: 1,
+                  filter: 'blur(0px)',
+                  transition: {
+                    duration: 0.6,
+                    ease: [0.16, 1, 0.3, 1],
+                  },
+                },
+              }}
+              className="inline-block bg-gradient-to-l from-[#3434d9] via-[#7c3aed] to-[#c084fc] bg-clip-text text-transparent"
+            >
               {SITE_CONTENT.hero.titleHighlight}
-            </span>
-          </h1>
+            </motion.span>
+          </motion.h1>
 
-          {/* النص الفرعي */}
-          <p className="mt-6 text-base sm:text-lg lg:text-xl text-slate-300 leading-relaxed max-w-3xl mx-auto font-normal">
-            {SITE_CONTENT.hero.subtitle}
-          </p>
+          {/* ٣. النص الفرعي مع ظهور انسيابي متسلسل للكلمات */}
+          <motion.p
+            initial="hidden"
+            animate="visible"
+            variants={{
+              hidden: {},
+              visible: {
+                transition: {
+                  staggerChildren: 0.025,
+                  delayChildren: 0.55,
+                },
+              },
+            }}
+            className="mt-6 text-base sm:text-lg lg:text-xl text-slate-300 leading-relaxed max-w-3xl mx-auto font-normal flex flex-wrap items-center justify-center gap-x-1.5 gap-y-1"
+          >
+            {heroSubtitleWords.map((word, idx) => (
+              <motion.span
+                key={idx}
+                variants={{
+                  hidden: { opacity: 0, y: 12, filter: 'blur(4px)' },
+                  visible: {
+                    opacity: 1,
+                    y: 0,
+                    filter: 'blur(0px)',
+                    transition: {
+                      duration: 0.38,
+                      ease: 'easeOut',
+                    },
+                  },
+                }}
+                className="inline-block"
+              >
+                {word}
+              </motion.span>
+            ))}
+          </motion.p>
 
-          {/* الأزرار الثلاثة */}
-          <div className="mt-9 flex flex-col sm:flex-row items-center justify-center gap-4">
+          {/* ٤. الأزرار الثلاثة تظهر بتتابع ناعم بعد اكتمال العنوان */}
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.95, ease: [0.16, 1, 0.3, 1] }}
+            className="mt-9 flex flex-col sm:flex-row items-center justify-center gap-4"
+          >
             {/* ١. زر أساسي */}
             <button
               type="button"
@@ -363,8 +477,8 @@ function Hero({ onOpenProjectModal }: { onOpenProjectModal: () => void }) {
               <Compass className="w-5 h-5 text-violet-400 stroke-[1.9] shrink-0" />
               <span>{SITE_CONTENT.hero.outlineBtn}</span>
             </a>
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
 
         {/* شريط الإحصائيات أسفل الأزرار */}
         <Stats />
@@ -374,11 +488,91 @@ function Hero({ onOpenProjectModal }: { onOpenProjectModal: () => void }) {
 }
 
 // ─────────────────────────────────────────────────────────────
+// بطاقة ميزة تفاعلية مع إضاءة خلفية بنفسجية ناعمة عند المرور (Hover)
+// ─────────────────────────────────────────────────────────────
+function FeatureCard({
+  feature,
+  index,
+}: {
+  feature: FeatureItem;
+  index: number;
+}) {
+  const IconComponent = FEATURE_ICONS[feature.iconName];
+  const [mousePos, setMousePos] = useState({ x: 180, y: 120 });
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setMousePos({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    });
+  };
+
+  return (
+    <motion.article
+      initial={{ opacity: 0, y: 18 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.15 }}
+      transition={{ duration: 0.4, delay: index * 0.06 }}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className="group relative overflow-hidden shadowx-card rounded-2xl p-7 flex flex-col justify-between"
+    >
+      {/* ١. هالة إضاءة خلفية بنفسجية ناعمة تضيء البطاقة عند المرور وتتلاشى عند الخروج */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -inset-px rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-out"
+        style={{
+          background: `radial-gradient(380px circle at ${mousePos.x}px ${mousePos.y}px, rgba(139, 92, 246, 0.22), rgba(52, 52, 217, 0.10) 45%, transparent 80%)`,
+        }}
+      />
+
+      {/* ٢. توهج خلفي محيطي ناعم أعلى البطاقة يتلاشى بسلاسة */}
+      <div
+        aria-hidden="true"
+        className={`pointer-events-none absolute -top-20 -right-20 w-52 h-52 rounded-full bg-gradient-to-br from-[#8b5cf6]/25 via-[#3434d9]/20 to-transparent blur-3xl transition-opacity duration-500 ease-out ${
+          isHovered ? 'opacity-100' : 'opacity-0'
+        }`}
+      />
+
+      {/* ٣. خط بريق علوي رفيع يظهر بنعومة عند الـ Hover */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute top-0 inset-x-8 h-[1px] bg-gradient-to-l from-transparent via-violet-400/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+      />
+
+      <div className="relative z-10">
+        {/* أيقونة مطوّرة داخل حاوية متوهجة */}
+        <div className="mb-6">
+          <IconBadge
+            Icon={IconComponent}
+            accentClass={feature.accentClass}
+            size="lg"
+          />
+        </div>
+
+        {/* عنوان H3 */}
+        <h3 className="font-display font-bold text-xl text-white group-hover:text-violet-100 transition-colors duration-300 mb-3">
+          {feature.title}
+        </h3>
+
+        {/* وصف البطاقة */}
+        <p className="text-slate-300 group-hover:text-slate-200 transition-colors duration-300 text-base leading-relaxed">
+          {feature.description}
+        </p>
+      </div>
+    </motion.article>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
 // ٤) قسم المزايا (Features) — id="features"
 // ─────────────────────────────────────────────────────────────
 function Features() {
   return (
-    <section id="features" className="py-20 sm:py-24 scroll-mt-20">
+    <section id="features" className="py-20 sm:py-24 scroll-mt-14 sm:scroll-mt-20 relative">
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
@@ -397,40 +591,9 @@ function Features() {
 
         {/* شبكة بطاقات: 3 أعمدة ديسكتوب / 2 تابلت / 1 موبايل */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {SITE_CONTENT.features.items.map((feature, index) => {
-            const IconComponent = FEATURE_ICONS[feature.iconName];
-            return (
-              <motion.article
-                key={feature.id}
-                initial={{ opacity: 0, y: 18 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.15 }}
-                transition={{ duration: 0.4, delay: index * 0.06 }}
-                className="group shadowx-card rounded-2xl p-7 flex flex-col justify-between"
-              >
-                <div>
-                  {/* أيقونة مطوّرة داخل حاوية متوهجة */}
-                  <div className="mb-6">
-                    <IconBadge
-                      Icon={IconComponent}
-                      accentClass={feature.accentClass}
-                      size="lg"
-                    />
-                  </div>
-
-                  {/* عنوان H3 */}
-                  <h3 className="font-display font-bold text-xl text-white mb-3">
-                    {feature.title}
-                  </h3>
-
-                  {/* وصف البطاقة */}
-                  <p className="text-slate-300 text-base leading-relaxed">
-                    {feature.description}
-                  </p>
-                </div>
-              </motion.article>
-            );
-          })}
+          {SITE_CONTENT.features.items.map((feature, index) => (
+            <FeatureCard key={feature.id} feature={feature} index={index} />
+          ))}
         </div>
       </div>
     </section>
@@ -439,10 +602,14 @@ function Features() {
 
 // ─────────────────────────────────────────────────────────────
 // ٥) قسم "كيف نعمل؟" (HowItWorks) — id="how"
+// يتضمن خطاً تفاعلياً بين الخطوات يسبب تكبيراً طفيفاً واهتزازاً ناعماً للبطاقات عند التمرير فوقه
 // ─────────────────────────────────────────────────────────────
 function HowItWorks() {
+  const [isLineHovered, setIsLineHovered] = useState(false);
+  const [hoveredStepIdx, setHoveredStepIdx] = useState<number | null>(null);
+
   return (
-    <section id="how" className="py-20 sm:py-24 scroll-mt-20 relative">
+    <section id="how" className="py-20 sm:py-24 scroll-mt-14 sm:scroll-mt-20 relative">
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
@@ -459,40 +626,139 @@ function HowItWorks() {
           </p>
         </motion.div>
 
-        {/* 4 خطوات أفقية مرقّمة متصلة بخط على الديسكتوب، وعمودية على الموبايل */}
+        {/* 4 خطوات أفقية مرقّمة متصلة بخط تفاعلي على الديسكتوب، وعمودية على الموبايل */}
         <div className="relative grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-8">
-          {/* الخط الأفقي الواصل بين الدوائر على الديسكتوب */}
+          {/* الخط الأفقي التفاعلي الواصل بين الخطوات على الديسكتوب */}
           <div
-            aria-hidden="true"
-            className="hidden lg:block absolute top-11 right-[12%] left-[12%] h-[2px] bg-gradient-to-l from-[#3434d9] via-[#7c3aed] to-[#3434d9]/30 -z-0"
-          />
+            onMouseEnter={() => setIsLineHovered(true)}
+            onMouseLeave={() => setIsLineHovered(false)}
+            title="مرّر هنا لتنشيط مسار العمل"
+            className="hidden lg:flex items-center absolute top-6 right-[8%] left-[8%] h-12 z-20 cursor-pointer group/line"
+          >
+            {/* المسار الأساسي للخط الواصل */}
+            <div
+              className={`w-full rounded-full transition-all duration-300 relative overflow-hidden ${
+                isLineHovered || hoveredStepIdx !== null
+                  ? 'h-[4px] bg-gradient-to-l from-[#3434d9] via-[#a855f7] to-[#3434d9] shadow-[0_0_20px_rgba(139,92,246,0.85)]'
+                  : 'h-[2px] bg-gradient-to-l from-[#3434d9] via-[#7c3aed] to-[#3434d9]/40'
+              }`}
+            >
+              {/* نبض ضوئي متحرك على طول الخط الواصل */}
+              <motion.div
+                animate={{ x: ['100%', '-100%'] }}
+                transition={{
+                  duration: isLineHovered ? 1.4 : 3.2,
+                  repeat: Infinity,
+                  ease: 'linear',
+                }}
+                className="w-1/3 h-full bg-gradient-to-l from-transparent via-white to-transparent opacity-80"
+              />
+            </div>
+          </div>
+
+          {/* الخط العمودي التفاعلي على الموبايل والتابلت */}
+          <div
+            onMouseEnter={() => setIsLineHovered(true)}
+            onMouseLeave={() => setIsLineHovered(false)}
+            className="lg:hidden absolute top-10 bottom-10 left-1/2 -translate-x-1/2 w-8 z-0 flex justify-center cursor-pointer"
+          >
+            <div
+              className={`h-full transition-all duration-300 rounded-full ${
+                isLineHovered
+                  ? 'w-[3px] bg-gradient-to-b from-[#3434d9] via-[#a855f7] to-[#3434d9] shadow-[0_0_16px_rgba(139,92,246,0.8)]'
+                  : 'w-[2px] bg-gradient-to-b from-[#3434d9]/60 via-[#7c3aed]/50 to-transparent'
+              }`}
+            />
+          </div>
 
           {SITE_CONTENT.howItWorks.steps.map((step, idx) => {
             const StepIcon = STEP_ICONS[step.iconName];
+            const isCardTriggered = isLineHovered || hoveredStepIdx === idx;
+
             return (
               <motion.div
                 key={idx}
                 initial={{ opacity: 0, y: 18 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.4, delay: idx * 0.08 }}
-                className="group relative z-10 flex flex-col items-center text-center shadowx-card rounded-2xl p-7"
+                animate={
+                  isLineHovered
+                    ? {
+                        scale: 1.035,
+                        y: -5,
+                        rotate: [0, -0.8, 0.8, -0.4, 0],
+                      }
+                    : hoveredStepIdx === idx
+                      ? {
+                          scale: 1.03,
+                          y: -5,
+                          rotate: [0, -0.6, 0.6, 0],
+                        }
+                      : {
+                          scale: 1,
+                          y: 0,
+                          rotate: 0,
+                        }
+                }
+                transition={{
+                  duration: 0.35,
+                  delay: isLineHovered ? idx * 0.04 : 0,
+                  ease: 'easeOut',
+                }}
+                onMouseEnter={() => setHoveredStepIdx(idx)}
+                onMouseLeave={() => setHoveredStepIdx(null)}
+                className={`group relative z-10 flex flex-col items-center text-center shadowx-card rounded-2xl p-7 ${
+                  isCardTriggered
+                    ? 'border-[#8b5cf6]/65 shadow-[0_16px_38px_-10px_rgba(139,92,246,0.38)]'
+                    : ''
+                }`}
               >
+                {/* توهج خلفي خفيف داخل البطاقة عند تنشيط الخط الواصل */}
+                <div
+                  aria-hidden="true"
+                  className={`pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-b from-[#8b5cf6]/12 via-transparent to-transparent transition-opacity duration-300 ${
+                    isCardTriggered ? 'opacity-100' : 'opacity-0'
+                  }`}
+                />
+
                 {/* دائرة الأيقونة مع شارة الرقم */}
-                <div className="relative mb-5">
-                  <div className="w-15 h-15 rounded-2xl bg-gradient-to-br from-[#3434d9] to-[#8b5cf6] text-white flex items-center justify-center shadow-lg shadow-[#3434d9]/40 border-4 border-[#0b0b14] group-hover:scale-105 transition-transform duration-200">
+                <motion.div
+                  animate={
+                    isCardTriggered
+                      ? {
+                          scale: [1, 1.12, 1.06],
+                          rotate: [0, -5, 5, 0],
+                        }
+                      : { scale: 1, rotate: 0 }
+                  }
+                  transition={{ duration: 0.35 }}
+                  className="relative z-20 mb-5"
+                >
+                  <div
+                    className={`w-15 h-15 rounded-2xl bg-gradient-to-br from-[#3434d9] to-[#8b5cf6] text-white flex items-center justify-center shadow-lg border-4 border-[#0b0b14] transition-all duration-200 ${
+                      isCardTriggered
+                        ? 'shadow-[#8b5cf6]/60 ring-2 ring-violet-400/50'
+                        : 'shadow-[#3434d9]/40'
+                    }`}
+                  >
                     <StepIcon className="w-6 h-6 stroke-[2]" />
                   </div>
-                  <span className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-[#14141f] border border-violet-400/50 text-violet-200 font-display font-bold text-xs flex items-center justify-center tabular-nums">
+                  <span
+                    className={`absolute -top-2 -right-2 w-6 h-6 rounded-full border font-display font-bold text-xs flex items-center justify-center tabular-nums transition-colors duration-200 ${
+                      isCardTriggered
+                        ? 'bg-[#8b5cf6] border-white/60 text-white shadow-sm shadow-violet-400/50'
+                        : 'bg-[#14141f] border-violet-400/50 text-violet-200'
+                    }`}
+                  >
                     {step.number}
                   </span>
-                </div>
+                </motion.div>
 
-                <h3 className="font-display font-bold text-xl text-white mb-2.5">
+                <h3 className="relative z-10 font-display font-bold text-xl text-white group-hover:text-violet-100 transition-colors mb-2.5">
                   {step.title}
                 </h3>
 
-                <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
+                <p className="relative z-10 text-slate-300 text-sm sm:text-base leading-relaxed">
                   {step.description}
                 </p>
               </motion.div>
@@ -509,7 +775,7 @@ function HowItWorks() {
 // ─────────────────────────────────────────────────────────────
 function Payments() {
   return (
-    <section id="pay" className="py-20 sm:py-24 scroll-mt-20">
+    <section id="pay" className="py-20 sm:py-24 scroll-mt-14 sm:scroll-mt-20">
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
@@ -579,7 +845,7 @@ function FAQ() {
   };
 
   return (
-    <section id="faq" className="py-20 sm:py-24 scroll-mt-20">
+    <section id="faq" className="py-20 sm:py-24 scroll-mt-14 sm:scroll-mt-20">
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
@@ -1189,27 +1455,405 @@ function FooterInfoModal({
 }
 
 // ─────────────────────────────────────────────────────────────
+// مؤشر التحميل المخصّص لشعار Sʜᴀᴅᴏᴡ𝐗 بنبض وتأثير توهج دوراني
+// ─────────────────────────────────────────────────────────────
+function SectionsSkeleton() {
+  const [emblemError, setEmblemError] = useState(false);
+
+  return (
+    <motion.div
+      key="shadowx-brand-loader"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0, scale: 0.98, filter: 'blur(6px)' }}
+      transition={{ duration: 0.35, ease: 'easeInOut' }}
+      role="status"
+      aria-live="polite"
+      aria-label="جاري تحميل موقع ShadowX"
+      className="relative z-10 flex-1 min-h-[75vh] flex flex-col items-center justify-center px-4 py-16 overflow-hidden"
+    >
+      {/* هالة خلفية متوهجة بنبض مستمر */}
+      <motion.div
+        aria-hidden="true"
+        animate={{
+          scale: [1, 1.22, 1],
+          opacity: [0.35, 0.65, 0.35],
+        }}
+        transition={{
+          duration: 2.4,
+          repeat: Infinity,
+          ease: 'easeInOut',
+        }}
+        className="pointer-events-none absolute w-72 h-72 sm:w-96 sm:h-96 rounded-full bg-gradient-to-tr from-[#3434d9]/40 via-[#7c3aed]/30 to-transparent blur-[95px]"
+      />
+
+      {/* الحاوية الدائرية للتوهج الدوراني والشعار */}
+      <div className="relative flex items-center justify-center w-36 h-36 sm:w-44 sm:h-44 mb-8">
+        {/* ١. حلقة التوهج الدوراني الخارجية (Conic Gradient Rotating Glow) */}
+        <motion.div
+          aria-hidden="true"
+          animate={{ rotate: 360 }}
+          transition={{ duration: 2.6, repeat: Infinity, ease: 'linear' }}
+          className="absolute inset-0 rounded-full p-[2px]"
+          style={{
+            background:
+              'conic-gradient(from 0deg, transparent 0%, rgba(52,52,217,0.2) 25%, #8b5cf6 65%, #c084fc 85%, transparent 100%)',
+          }}
+        >
+          <div className="w-full h-full rounded-full bg-[#0b0b14]" />
+        </motion.div>
+
+        {/* ٢. هالة ضوئية دورانية ناعمة خلف الحلقة */}
+        <motion.div
+          aria-hidden="true"
+          animate={{ rotate: -360 }}
+          transition={{ duration: 3.4, repeat: Infinity, ease: 'linear' }}
+          className="absolute -inset-2 rounded-full opacity-75 blur-md pointer-events-none"
+          style={{
+            background:
+              'conic-gradient(from 180deg, transparent 0%, rgba(139,92,246,0.45) 50%, rgba(52,52,217,0.55) 85%, transparent 100%)',
+          }}
+        />
+
+        {/* ٣. مدار متقطع يدور بالاتجاه المعاكس */}
+        <motion.div
+          aria-hidden="true"
+          animate={{ rotate: -360 }}
+          transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
+          className="absolute inset-3 rounded-full border border-dashed border-violet-400/35"
+        />
+
+        {/* ٤. قلب الشعار النابض */}
+        <motion.div
+          animate={{
+            scale: [0.95, 1.06, 0.95],
+          }}
+          transition={{
+            duration: 1.8,
+            repeat: Infinity,
+            ease: 'easeInOut',
+          }}
+          className="relative z-10 w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-gradient-to-br from-[#14141f] via-[#1c1c32] to-[#0b0b14] border border-violet-500/30 shadow-[0_0_40px_rgba(52,52,217,0.45)] flex items-center justify-center overflow-hidden"
+        >
+          {!emblemError ? (
+            <img
+              src={SITE_CONTENT.brand.emblemLogo}
+              alt="شعار ShadowX"
+              referrerPolicy="no-referrer"
+              onError={() => setEmblemError(true)}
+              className="w-16 h-16 sm:w-20 sm:h-20 object-contain drop-shadow-[0_0_14px_rgba(139,92,246,0.65)]"
+            />
+          ) : (
+            <span
+              dir="ltr"
+              className="font-display font-extrabold text-3xl text-white tracking-tight"
+            >
+              SX
+            </span>
+          )}
+        </motion.div>
+      </div>
+
+      {/* نص الهوية Sʜᴀᴅᴏᴡ𝐗 مع نبض وتدرج متوهج */}
+      <motion.div
+        animate={{
+          opacity: [0.7, 1, 0.7],
+          scale: [0.98, 1.02, 0.98],
+        }}
+        transition={{
+          duration: 1.8,
+          repeat: Infinity,
+          ease: 'easeInOut',
+        }}
+        className="text-center"
+      >
+        <div
+          dir="ltr"
+          className="font-display font-extrabold text-3xl sm:text-4xl tracking-wider text-white drop-shadow-[0_0_20px_rgba(139,92,246,0.45)]"
+        >
+          Sʜᴀᴅᴏᴡ
+          <span className="bg-gradient-to-tr from-[#3434d9] via-[#8b5cf6] to-[#c084fc] bg-clip-text text-transparent">
+            𝐗
+          </span>
+        </div>
+        <p className="mt-2.5 text-xs sm:text-sm font-medium text-violet-300/80">
+          {SITE_CONTENT.hero.badge}
+        </p>
+      </motion.div>
+
+      {/* شريط تحميل ضوئي سفلي أنيق */}
+      <div className="mt-6 w-44 sm:w-56 h-1 rounded-full bg-white/[0.06] overflow-hidden relative">
+        <motion.div
+          initial={{ x: '100%' }}
+          animate={{ x: '-100%' }}
+          transition={{
+            duration: 1.1,
+            repeat: Infinity,
+            ease: 'easeInOut',
+          }}
+          className="w-2/3 h-full rounded-full bg-gradient-to-l from-transparent via-[#8b5cf6] to-transparent shadow-[0_0_12px_#8b5cf6]"
+        />
+      </div>
+    </motion.div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// خلفية نقوش هندسية ورسوم ووسوم متحركة كصفحات الهبوط الاحترافية
+// ─────────────────────────────────────────────────────────────
+const FLOATING_BADGES = [
+  {
+    label: '< API />',
+    top: '14%',
+    left: '7%',
+    delay: 0,
+    duration: 8.5,
+  },
+  {
+    label: '{ USDT }',
+    top: '24%',
+    right: '6%',
+    delay: 1.2,
+    duration: 9.5,
+  },
+  {
+    label: 'Sʜᴀᴅᴏᴡ𝐗',
+    top: '48%',
+    left: '5%',
+    delay: 0.6,
+    duration: 10.5,
+  },
+  {
+    label: '⚡ أتمتة ١٠٠٪',
+    top: '56%',
+    right: '5%',
+    delay: 1.8,
+    duration: 9,
+  },
+  {
+    label: 'Binance Pay',
+    top: '76%',
+    left: '8%',
+    delay: 0.9,
+    duration: 11,
+  },
+  {
+    label: '٢٤/٧',
+    top: '82%',
+    right: '7%',
+    delay: 2.1,
+    duration: 8.8,
+  },
+];
+
+function AnimatedLandingBackground() {
+  return (
+    <div
+      aria-hidden="true"
+      className="pointer-events-none fixed inset-0 z-0 overflow-hidden select-none"
+    >
+      {/* ١. شبكة هندسية معمارية (Architectural Grid) */}
+      <div className="absolute inset-0 bg-architectural-grid opacity-80" />
+
+      {/* ٢. مصفوفة نقاط دقيقة (Dot Matrix) */}
+      <div className="absolute inset-0 bg-dot-matrix opacity-45" />
+
+      {/* ٣. هالات ضوئية متحركة في الزوايا */}
+      <motion.div
+        animate={{
+          x: [0, 35, -20, 0],
+          y: [0, -30, 20, 0],
+          scale: [1, 1.08, 0.95, 1],
+        }}
+        transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
+        className="absolute -top-32 -right-32 w-[480px] h-[480px] rounded-full bg-gradient-to-br from-[#3434d9]/18 via-[#8b5cf6]/12 to-transparent blur-[130px]"
+      />
+      <motion.div
+        animate={{
+          x: [0, -40, 25, 0],
+          y: [0, 35, -25, 0],
+          scale: [1, 0.94, 1.06, 1],
+        }}
+        transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut' }}
+        className="absolute top-[42%] -left-40 w-[520px] h-[520px] rounded-full bg-gradient-to-tr from-[#6d28d9]/16 via-[#3434d9]/10 to-transparent blur-[140px]"
+      />
+
+      {/* ٤. رسوم خطوط ومسارات هندسية متوهجة (SVG Vector Mesh & Circuits) */}
+      <svg
+        className="absolute inset-0 w-full h-full opacity-30"
+        viewBox="0 0 1440 900"
+        fill="none"
+        preserveAspectRatio="xMidYMid slice"
+      >
+        <defs>
+          <linearGradient id="shadowx-line-grad-1" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#3434d9" stopOpacity="0" />
+            <stop offset="50%" stopColor="#8b5cf6" stopOpacity="0.55" />
+            <stop offset="100%" stopColor="#3434d9" stopOpacity="0" />
+          </linearGradient>
+          <linearGradient id="shadowx-line-grad-2" x1="100%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#8b5cf6" stopOpacity="0" />
+            <stop offset="50%" stopColor="#3434d9" stopOpacity="0.45" />
+            <stop offset="100%" stopColor="#8b5cf6" stopOpacity="0" />
+          </linearGradient>
+        </defs>
+
+        {/* مسارات منحنية هندسية */}
+        <motion.path
+          d="M-100 180 C 320 60, 580 340, 1020 160 C 1240 70, 1400 220, 1560 140"
+          stroke="url(#shadowx-line-grad-1)"
+          strokeWidth="1.5"
+          strokeDasharray="8 8"
+          initial={{ pathLength: 0.2, opacity: 0.3 }}
+          animate={{ pathLength: [0.3, 1, 0.3], opacity: [0.25, 0.65, 0.25] }}
+          transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
+        />
+
+        <motion.path
+          d="M-80 680 C 340 520, 760 820, 1140 610 C 1310 520, 1420 670, 1540 590"
+          stroke="url(#shadowx-line-grad-2)"
+          strokeWidth="1.5"
+          initial={{ pathLength: 0.3, opacity: 0.2 }}
+          animate={{ pathLength: [0.4, 1, 0.4], opacity: [0.2, 0.55, 0.2] }}
+          transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut' }}
+        />
+
+        {/* أشكال سداسية ومربعات هندسية عائمة */}
+        <g className="animate-float-slow" opacity="0.45">
+          <polygon
+            points="180,110 205,124 205,152 180,166 155,152 155,124"
+            stroke="#8b5cf6"
+            strokeOpacity="0.4"
+            strokeWidth="1.2"
+            fill="rgba(52, 52, 217, 0.04)"
+          />
+          <circle cx="180" cy="138" r="3" fill="#8b5cf6" fillOpacity="0.5" />
+        </g>
+
+        <g className="animate-float-reverse" opacity="0.4">
+          <polygon
+            points="1260,260 1290,277 1290,311 1260,328 1230,311 1230,277"
+            stroke="#3434d9"
+            strokeOpacity="0.45"
+            strokeWidth="1.2"
+            fill="rgba(139, 92, 246, 0.04)"
+          />
+          <circle cx="1260" cy="294" r="3.5" fill="#3434d9" fillOpacity="0.6" />
+        </g>
+
+        <g className="animate-float-slow" opacity="0.35">
+          <rect
+            x="1180"
+            y="690"
+            width="44"
+            height="44"
+            rx="10"
+            transform="rotate(18 1202 712)"
+            stroke="#8b5cf6"
+            strokeOpacity="0.35"
+            strokeWidth="1.2"
+            fill="rgba(52, 52, 217, 0.03)"
+          />
+        </g>
+
+        <g className="animate-float-reverse" opacity="0.35">
+          <rect
+            x="130"
+            y="590"
+            width="38"
+            height="38"
+            rx="9"
+            transform="rotate(-15 149 609)"
+            stroke="#3434d9"
+            strokeOpacity="0.4"
+            strokeWidth="1.2"
+            fill="rgba(139, 92, 246, 0.03)"
+          />
+        </g>
+      </svg>
+
+      {/* ٥. وسوم ورموز برمجية زجاجية متحركة (Floating Tech Tags) على الشاشات الكبيرة */}
+      <div className="hidden xl:block">
+        {FLOATING_BADGES.map((badge, idx) => (
+          <motion.div
+            key={idx}
+            style={{
+              top: badge.top,
+              left: badge.left,
+              right: badge.right,
+            }}
+            animate={{
+              y: [0, -14, 0],
+              rotate: [-1.5, 1.5, -1.5],
+              opacity: [0.32, 0.62, 0.32],
+            }}
+            transition={{
+              duration: badge.duration,
+              delay: badge.delay,
+              repeat: Infinity,
+              ease: 'easeInOut',
+            }}
+            className="absolute px-3.5 py-1.5 rounded-2xl bg-[#14141f]/70 backdrop-blur-md border border-violet-500/20 shadow-lg shadow-[#3434d9]/10 text-xs font-mono font-bold text-violet-300/80 tracking-wider"
+          >
+            <span dir="ltr">{badge.label}</span>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
 // التطبيق الرئيسي (App) — يجمع الأقسام بالترتيب المطلوب بالضبط:
 // Navbar -> Hero (+ Stats) -> Features -> HowItWorks -> Payments -> FAQ -> FinalCTA -> Footer
+// مع عرض Skeleton Loading بنبض ناعم عند فتح الموقع لأول مرة
 // ─────────────────────────────────────────────────────────────
 export default function App() {
   const [projectModalOpen, setProjectModalOpen] = useState(false);
   const [infoModalKey, setInfoModalKey] = useState<string | null>(null);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsInitialLoading(false);
+    }, 850);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
-    <div dir="rtl" className="min-h-screen bg-[#0b0b14] text-slate-100 flex flex-col">
+    <div dir="rtl" className="relative min-h-screen bg-[#0b0b14] text-slate-100 flex flex-col isolate">
+      {/* شريط تقدم التمرير العلوي */}
+      <ScrollProgressBar />
+
+      {/* خلفية النقوش والرسوم والوسوم المتحركة */}
+      <AnimatedLandingBackground />
+
       <Navbar onOpenProjectModal={() => setProjectModalOpen(true)} />
 
-      <main className="flex-1">
-        <Hero onOpenProjectModal={() => setProjectModalOpen(true)} />
-        <Features />
-        <HowItWorks />
-        <Payments />
-        <FAQ />
-        <FinalCTA onOpenProjectModal={() => setProjectModalOpen(true)} />
-      </main>
+      <AnimatePresence mode="wait">
+        {isInitialLoading ? (
+          <SectionsSkeleton />
+        ) : (
+          <motion.main
+            key="main-content"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.35 }}
+            className="relative z-10 flex-1"
+          >
+            <Hero onOpenProjectModal={() => setProjectModalOpen(true)} />
+            <Features />
+            <HowItWorks />
+            <Payments />
+            <FAQ />
+            <FinalCTA onOpenProjectModal={() => setProjectModalOpen(true)} />
+          </motion.main>
+        )}
+      </AnimatePresence>
 
-      <Footer onOpenInfoModal={(key) => setInfoModalKey(key)} />
+      <div className="relative z-10">
+        <Footer onOpenInfoModal={(key) => setInfoModalKey(key)} />
+      </div>
 
       {/* النوافذ التفاعلية للأزرار والروابط */}
       <ProjectInquiryModal

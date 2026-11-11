@@ -30,15 +30,76 @@ h1, h2, h3, h4, .font-display {
 .shadowx-card {
   background-color: var(--color-card);
   border: 1px solid var(--color-border);
-  transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 180ms cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 180ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 220ms cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 260ms cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 260ms cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 260ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .shadowx-card:hover {
   transform: translateY(-4px);
   border-color: rgba(139, 92, 246, 0.45);
-  box-shadow: 0 14px 34px -10px rgba(52, 52, 217, 0.28);
+  box-shadow: 0 16px 38px -10px rgba(52, 52, 217, 0.32);
+}
+
+/* نقوش هندسية احترافية للخلفية */
+.bg-architectural-grid {
+  background-size: 56px 56px;
+  background-image:
+    linear-gradient(to right, rgba(139, 92, 246, 0.055) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(139, 92, 246, 0.055) 1px, transparent 1px);
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 35%, #000 35%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 35%, #000 35%, transparent 100%);
+}
+
+.bg-dot-matrix {
+  background-image: radial-gradient(rgba(139, 92, 246, 0.16) 1px, transparent 1px);
+  background-size: 28px 28px;
+  mask-image: radial-gradient(circle at 50% 50%, #000 20%, transparent 85%);
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 20%, transparent 85%);
+}
+
+/* حركات الطفو والنبض للوسوم والرسوم الهندسية في الخلفية */
+@keyframes floatSlow {
+  0%, 100% {
+    transform: translate3d(0, 0px, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(0, -16px, 0) rotate(2.5deg);
+  }
+}
+
+@keyframes floatReverse {
+  0%, 100% {
+    transform: translate3d(0, 0px, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(0, 14px, 0) rotate(-2.5deg);
+  }
+}
+
+.animate-float-slow {
+  animation: floatSlow 9s ease-in-out infinite;
+}
+
+.animate-float-reverse {
+  animation: floatReverse 11s ease-in-out infinite;
+}
+
+/* تأثير النبض الناعم لمكوّن Skeleton Loading */
+@keyframes skeletonSoftPulse {
+  0%, 100% {
+    opacity: 0.45;
+    border-color: rgba(255, 255, 255, 0.06);
+  }
+  50% {
+    opacity: 0.92;
+    border-color: rgba(139, 92, 246, 0.22);
+  }
+}
+
+.skeleton-pulse {
+  animation: skeletonSoftPulse 1.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -50,5 +111,10 @@ h1, h2, h3, h4, .font-display {
   }
   .shadowx-card:hover {
     transform: none;
+  }
+  .skeleton-pulse,
+  .animate-float-slow,
+  .animate-float-reverse {
+    animation: none;
   }
 }
