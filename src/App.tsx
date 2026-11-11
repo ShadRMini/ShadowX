@@ -282,22 +282,64 @@ function Navbar({ onOpenProjectModal }: { onOpenProjectModal: () => void }) {
 }
 
 // ─────────────────────────────────────────────────────────────
-// ٢) شريط الإحصائيات (Stats)
+// متغيرات الحركة التدريجية المتتابعة عند التمرير (Staggered Scroll Fade-Up Variants)
+// ─────────────────────────────────────────────────────────────
+const SECTION_FADE_UP_VARIANTS = {
+  hidden: { opacity: 0, y: 36 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.65,
+      ease: [0.16, 1, 0.3, 1] as const,
+      staggerChildren: 0.12,
+      delayChildren: 0.05,
+    },
+  },
+};
+
+const STAGGER_CONTAINER_VARIANTS = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.08,
+    },
+  },
+};
+
+const FADE_UP_ITEM_VARIANTS = {
+  hidden: { opacity: 0, y: 28, scale: 0.98 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.55,
+      ease: [0.16, 1, 0.3, 1] as const,
+    },
+  },
+};
+
+// ─────────────────────────────────────────────────────────────
+// ٢) شريط الإحصائيات (Stats) — مع ظهور تدريجي متتابع لكل بطاقة إحصائية
 // ─────────────────────────────────────────────────────────────
 function Stats() {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 18 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      variants={STAGGER_CONTAINER_VARIANTS}
+      initial="hidden"
+      whileInView="visible"
       viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.45, delay: 0.15 }}
       className="mt-14 grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6"
     >
       {STATS_DATA.map((stat, idx) => {
         const StatIcon = STAT_ICONS[idx % STAT_ICONS.length];
         return (
-          <div
+          <motion.div
             key={idx}
+            variants={FADE_UP_ITEM_VARIANTS}
             className="group shadowx-card rounded-2xl p-6 text-center flex flex-col items-center justify-center"
           >
             <div className="mb-3 w-10 h-10 rounded-xl bg-gradient-to-br from-[#3434d9]/20 to-[#8b5cf6]/15 border border-violet-500/25 flex items-center justify-center text-violet-300 group-hover:scale-105 transition-transform duration-200">
@@ -312,7 +354,7 @@ function Stats() {
             <span className="mt-2 text-sm sm:text-base font-medium text-slate-400">
               {stat.label}
             </span>
-          </div>
+          </motion.div>
         );
       })}
     </motion.div>
@@ -327,7 +369,13 @@ const heroSubtitleWords = SITE_CONTENT.hero.subtitle.split(' ');
 
 function Hero({ onOpenProjectModal }: { onOpenProjectModal: () => void }) {
   return (
-    <section className="relative pt-14 pb-20 sm:pt-20 sm:pb-28 overflow-hidden">
+    <motion.section
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.15 }}
+      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      className="relative pt-14 pb-20 sm:pt-20 sm:pb-28 overflow-hidden"
+    >
       {/* تأثير توهج (glow) خلف قسم الـ Hero بتدرج دائري blur من اللون الأساسي */}
       <div
         aria-hidden="true"
@@ -485,16 +533,16 @@ function Hero({ onOpenProjectModal }: { onOpenProjectModal: () => void }) {
         {/* شريط الإحصائيات أسفل الأزرار */}
         <Stats />
       </div>
-    </section>
+    </motion.section>
   );
 }
 
 // ─────────────────────────────────────────────────────────────
 // بطاقة ميزة تفاعلية مع إضاءة خلفية بنفسجية ناعمة عند المرور (Hover)
+// وظهور تدريجي متتابع (Fade-up) ضمن شبكة المزايا
 // ─────────────────────────────────────────────────────────────
 function FeatureCard({
   feature,
-  index,
 }: {
   feature: FeatureItem;
   index: number;
@@ -513,10 +561,7 @@ function FeatureCard({
 
   return (
     <motion.article
-      initial={{ opacity: 0, y: 18 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.15 }}
-      transition={{ duration: 0.4, delay: index * 0.06 }}
+      variants={FADE_UP_ITEM_VARIANTS}
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -571,16 +616,21 @@ function FeatureCard({
 
 // ─────────────────────────────────────────────────────────────
 // ٤) قسم المزايا (Features) — id="features"
+// مع ظهور تدريجي متتابع (Fade-up) للقسم والبطاقات عند التمرير
 // ─────────────────────────────────────────────────────────────
 function Features() {
   return (
-    <section id="features" className="py-20 sm:py-24 scroll-mt-14 sm:scroll-mt-20 relative">
+    <motion.section
+      id="features"
+      variants={SECTION_FADE_UP_VARIANTS}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.12 }}
+      className="py-20 sm:py-24 scroll-mt-14 sm:scroll-mt-20 relative"
+    >
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.45 }}
+          variants={FADE_UP_ITEM_VARIANTS}
           className="text-center max-w-2xl mx-auto mb-14"
         >
           <h2 className="font-display font-extrabold text-2xl sm:text-4xl text-white tracking-tight">
@@ -591,33 +641,40 @@ function Features() {
           </p>
         </motion.div>
 
-        {/* شبكة بطاقات: 3 أعمدة ديسكتوب / 2 تابلت / 1 موبايل */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* شبكة بطاقات: 3 أعمدة ديسكتوب / 2 تابلت / 1 موبايل مع تتابع Fade-up */}
+        <motion.div
+          variants={STAGGER_CONTAINER_VARIANTS}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
           {SITE_CONTENT.features.items.map((feature, index) => (
             <FeatureCard key={feature.id} feature={feature} index={index} />
           ))}
-        </div>
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 }
 
 // ─────────────────────────────────────────────────────────────
 // ٥) قسم "كيف نعمل؟" (HowItWorks) — id="how"
-// يتضمن خطاً تفاعلياً بين الخطوات يسبب تكبيراً طفيفاً واهتزازاً ناعماً للبطاقات عند التمرير فوقه
+// يتضمن خطاً تفاعلياً بين الخطوات + ظهور تدريجي متتابع (Fade-up) عند التمرير
 // ─────────────────────────────────────────────────────────────
 function HowItWorks() {
   const [isLineHovered, setIsLineHovered] = useState(false);
   const [hoveredStepIdx, setHoveredStepIdx] = useState<number | null>(null);
 
   return (
-    <section id="how" className="py-20 sm:py-24 scroll-mt-14 sm:scroll-mt-20 relative">
+    <motion.section
+      id="how"
+      variants={SECTION_FADE_UP_VARIANTS}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.15 }}
+      className="py-20 sm:py-24 scroll-mt-14 sm:scroll-mt-20 relative"
+    >
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.45 }}
+          variants={FADE_UP_ITEM_VARIANTS}
           className="text-center max-w-2xl mx-auto mb-16"
         >
           <h2 className="font-display font-extrabold text-2xl sm:text-4xl text-white tracking-tight">
@@ -629,7 +686,10 @@ function HowItWorks() {
         </motion.div>
 
         {/* 4 خطوات أفقية مرقّمة متصلة بخط تفاعلي على الديسكتوب، وعمودية على الموبايل */}
-        <div className="relative grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-8">
+        <motion.div
+          variants={STAGGER_CONTAINER_VARIANTS}
+          className="relative grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-8"
+        >
           {/* الخط الأفقي التفاعلي الواصل بين الخطوات على الديسكتوب */}
           <div
             onMouseEnter={() => setIsLineHovered(true)}
@@ -680,110 +740,117 @@ function HowItWorks() {
             return (
               <motion.div
                 key={idx}
-                initial={{ opacity: 0, y: 18 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.2 }}
-                animate={
-                  isLineHovered
-                    ? {
-                        scale: 1.035,
-                        y: -5,
-                        rotate: [0, -0.8, 0.8, -0.4, 0],
-                      }
-                    : hoveredStepIdx === idx
-                      ? {
-                          scale: 1.03,
-                          y: -5,
-                          rotate: [0, -0.6, 0.6, 0],
-                        }
-                      : {
-                          scale: 1,
-                          y: 0,
-                          rotate: 0,
-                        }
-                }
-                transition={{
-                  duration: 0.35,
-                  delay: isLineHovered ? idx * 0.04 : 0,
-                  ease: 'easeOut',
-                }}
-                onMouseEnter={() => setHoveredStepIdx(idx)}
-                onMouseLeave={() => setHoveredStepIdx(null)}
-                className={`group relative z-10 flex flex-col items-center text-center shadowx-card rounded-2xl p-7 ${
-                  isCardTriggered
-                    ? 'border-[#8b5cf6]/65 shadow-[0_16px_38px_-10px_rgba(139,92,246,0.38)]'
-                    : ''
-                }`}
+                variants={FADE_UP_ITEM_VARIANTS}
+                className="relative z-10 flex"
               >
-                {/* توهج خلفي خفيف داخل البطاقة عند تنشيط الخط الواصل */}
-                <div
-                  aria-hidden="true"
-                  className={`pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-b from-[#8b5cf6]/12 via-transparent to-transparent transition-opacity duration-300 ${
-                    isCardTriggered ? 'opacity-100' : 'opacity-0'
-                  }`}
-                />
-
-                {/* دائرة الأيقونة مع شارة الرقم */}
                 <motion.div
                   animate={
-                    isCardTriggered
+                    isLineHovered
                       ? {
-                          scale: [1, 1.12, 1.06],
-                          rotate: [0, -5, 5, 0],
+                          scale: 1.035,
+                          y: -5,
+                          rotate: [0, -0.8, 0.8, -0.4, 0],
                         }
-                      : { scale: 1, rotate: 0 }
+                      : hoveredStepIdx === idx
+                        ? {
+                            scale: 1.03,
+                            y: -5,
+                            rotate: [0, -0.6, 0.6, 0],
+                          }
+                        : {
+                            scale: 1,
+                            y: 0,
+                            rotate: 0,
+                          }
                   }
-                  transition={{ duration: 0.35 }}
-                  className="relative z-20 mb-5"
+                  transition={{
+                    duration: 0.35,
+                    delay: isLineHovered ? idx * 0.04 : 0,
+                    ease: 'easeOut',
+                  }}
+                  onMouseEnter={() => setHoveredStepIdx(idx)}
+                  onMouseLeave={() => setHoveredStepIdx(null)}
+                  className={`group relative w-full flex flex-col items-center text-center shadowx-card rounded-2xl p-7 ${
+                    isCardTriggered
+                      ? 'border-[#8b5cf6]/65 shadow-[0_16px_38px_-10px_rgba(139,92,246,0.38)]'
+                      : ''
+                  }`}
                 >
+                  {/* توهج خلفي خفيف داخل البطاقة عند تنشيط الخط الواصل */}
                   <div
-                    className={`w-15 h-15 rounded-2xl bg-gradient-to-br from-[#3434d9] to-[#8b5cf6] text-white flex items-center justify-center shadow-lg border-4 border-[#0b0b14] transition-all duration-200 ${
-                      isCardTriggered
-                        ? 'shadow-[#8b5cf6]/60 ring-2 ring-violet-400/50'
-                        : 'shadow-[#3434d9]/40'
+                    aria-hidden="true"
+                    className={`pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-b from-[#8b5cf6]/12 via-transparent to-transparent transition-opacity duration-300 ${
+                      isCardTriggered ? 'opacity-100' : 'opacity-0'
                     }`}
-                  >
-                    <StepIcon className="w-6 h-6 stroke-[2]" />
-                  </div>
-                  <span
-                    className={`absolute -top-2 -right-2 w-6 h-6 rounded-full border font-display font-bold text-xs flex items-center justify-center tabular-nums transition-colors duration-200 ${
+                  />
+
+                  {/* دائرة الأيقونة مع شارة الرقم */}
+                  <motion.div
+                    animate={
                       isCardTriggered
-                        ? 'bg-[#8b5cf6] border-white/60 text-white shadow-sm shadow-violet-400/50'
-                        : 'bg-[#14141f] border-violet-400/50 text-violet-200'
-                    }`}
+                        ? {
+                            scale: [1, 1.12, 1.06],
+                            rotate: [0, -5, 5, 0],
+                          }
+                        : { scale: 1, rotate: 0 }
+                    }
+                    transition={{ duration: 0.35 }}
+                    className="relative z-20 mb-5"
                   >
-                    {step.number}
-                  </span>
+                    <div
+                      className={`w-15 h-15 rounded-2xl bg-gradient-to-br from-[#3434d9] to-[#8b5cf6] text-white flex items-center justify-center shadow-lg border-4 border-[#0b0b14] transition-all duration-200 ${
+                        isCardTriggered
+                          ? 'shadow-[#8b5cf6]/60 ring-2 ring-violet-400/50'
+                          : 'shadow-[#3434d9]/40'
+                      }`}
+                    >
+                      <StepIcon className="w-6 h-6 stroke-[2]" />
+                    </div>
+                    <span
+                      className={`absolute -top-2 -right-2 w-6 h-6 rounded-full border font-display font-bold text-xs flex items-center justify-center tabular-nums transition-colors duration-200 ${
+                        isCardTriggered
+                          ? 'bg-[#8b5cf6] border-white/60 text-white shadow-sm shadow-violet-400/50'
+                          : 'bg-[#14141f] border-violet-400/50 text-violet-200'
+                      }`}
+                    >
+                      {step.number}
+                    </span>
+                  </motion.div>
+
+                  <h3 className="relative z-10 font-display font-bold text-xl text-white group-hover:text-violet-100 transition-colors mb-2.5">
+                    {step.title}
+                  </h3>
+
+                  <p className="relative z-10 text-slate-300 text-sm sm:text-base leading-relaxed">
+                    {step.description}
+                  </p>
                 </motion.div>
-
-                <h3 className="relative z-10 font-display font-bold text-xl text-white group-hover:text-violet-100 transition-colors mb-2.5">
-                  {step.title}
-                </h3>
-
-                <p className="relative z-10 text-slate-300 text-sm sm:text-base leading-relaxed">
-                  {step.description}
-                </p>
               </motion.div>
             );
           })}
-        </div>
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 }
 
 // ─────────────────────────────────────────────────────────────
 // ٦) قسم طرق الدفع (Payments) — id="pay"
+// مع ظهور تدريجي متتابع (Fade-up) عند التمرير
 // ─────────────────────────────────────────────────────────────
 function Payments() {
   return (
-    <section id="pay" className="py-20 sm:py-24 scroll-mt-14 sm:scroll-mt-20">
+    <motion.section
+      id="pay"
+      variants={SECTION_FADE_UP_VARIANTS}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.15 }}
+      className="py-20 sm:py-24 scroll-mt-14 sm:scroll-mt-20"
+    >
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.45 }}
+          variants={FADE_UP_ITEM_VARIANTS}
           className="text-center max-w-2xl mx-auto mb-14"
         >
           <h2 className="font-display font-extrabold text-2xl sm:text-4xl text-white tracking-tight">
@@ -794,16 +861,16 @@ function Payments() {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {SITE_CONTENT.payments.items.map((item, idx) => {
+        <motion.div
+          variants={STAGGER_CONTAINER_VARIANTS}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+        >
+          {SITE_CONTENT.payments.items.map((item) => {
             const IconComponent = PAYMENT_ICONS[item.iconName];
             return (
               <motion.div
                 key={item.id}
-                initial={{ opacity: 0, y: 18 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.4, delay: idx * 0.06 }}
+                variants={FADE_UP_ITEM_VARIANTS}
                 className="group shadowx-card rounded-2xl p-6 flex flex-col justify-between"
               >
                 <div>
@@ -829,15 +896,15 @@ function Payments() {
               </motion.div>
             );
           })}
-        </div>
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 }
 
 // ─────────────────────────────────────────────────────────────
 // ٧) قسم الأسئلة الشائعة (FAQ) — id="faq"
-// Accordion يفتح عنصر واحد فقط، مع أيقونة سهم تدور وحركة انسيابية
+// Accordion يفتح عنصر واحد فقط، مع ظهور تدريجي متتابع (Fade-up) لكل سؤال عند التمرير
 // ─────────────────────────────────────────────────────────────
 function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
@@ -847,13 +914,17 @@ function FAQ() {
   };
 
   return (
-    <section id="faq" className="py-20 sm:py-24 scroll-mt-14 sm:scroll-mt-20">
+    <motion.section
+      id="faq"
+      variants={SECTION_FADE_UP_VARIANTS}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.12 }}
+      className="py-20 sm:py-24 scroll-mt-14 sm:scroll-mt-20"
+    >
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.45 }}
+          variants={FADE_UP_ITEM_VARIANTS}
           className="text-center max-w-2xl mx-auto mb-14"
         >
           <h2 className="font-display font-extrabold text-2xl sm:text-4xl text-white tracking-tight">
@@ -864,15 +935,19 @@ function FAQ() {
           </p>
         </motion.div>
 
-        <div className="max-w-3xl mx-auto space-y-3.5">
+        <motion.div
+          variants={STAGGER_CONTAINER_VARIANTS}
+          className="max-w-3xl mx-auto space-y-3.5"
+        >
           {SITE_CONTENT.faq.items.map((item, idx) => {
             const isOpen = openIndex === idx;
             const contentId = `faq-answer-${idx}`;
             const buttonId = `faq-question-${idx}`;
 
             return (
-              <div
+              <motion.div
                 key={idx}
+                variants={FADE_UP_ITEM_VARIANTS}
                 className={`rounded-2xl transition-colors duration-200 border ${
                   isOpen
                     ? 'bg-[#14141f] border-[#8b5cf6]/50 shadow-lg shadow-[#3434d9]/15'
@@ -915,27 +990,30 @@ function FAQ() {
                     </motion.div>
                   )}
                 </AnimatePresence>
-              </div>
+              </motion.div>
             );
           })}
-        </div>
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 }
 
 // ─────────────────────────────────────────────────────────────
-// ٨) قسم الدعوة الأخيرة (Final CTA)
+// ٨) قسم الدعوة الأخيرة (Final CTA) — مع ظهور تدريجي متتابع (Fade-up)
 // ─────────────────────────────────────────────────────────────
 function FinalCTA({ onOpenProjectModal }: { onOpenProjectModal: () => void }) {
   return (
-    <section className="py-16 sm:py-24">
+    <motion.section
+      variants={SECTION_FADE_UP_VARIANTS}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.2 }}
+      className="py-16 sm:py-24"
+    >
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
         <motion.div
-          initial={{ opacity: 0, y: 18 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.25 }}
-          transition={{ duration: 0.45 }}
+          variants={FADE_UP_ITEM_VARIANTS}
           className="relative rounded-2xl overflow-hidden p-8 sm:p-14 text-center bg-gradient-to-br from-[#3434d9] via-[#4c1d95] to-[#1e1b4b] border border-violet-400/30 shadow-2xl shadow-[#3434d9]/40"
         >
           {/* توهج داخلي */}
@@ -948,15 +1026,27 @@ function FinalCTA({ onOpenProjectModal }: { onOpenProjectModal: () => void }) {
             className="pointer-events-none absolute -bottom-24 -right-24 w-72 h-72 rounded-full bg-[#3434d9]/40 blur-3xl"
           />
 
-          <div className="relative z-10 max-w-2xl mx-auto">
-            <h2 className="font-display font-extrabold text-2xl sm:text-4xl lg:text-5xl text-white tracking-tight">
+          <motion.div
+            variants={STAGGER_CONTAINER_VARIANTS}
+            className="relative z-10 max-w-2xl mx-auto"
+          >
+            <motion.h2
+              variants={FADE_UP_ITEM_VARIANTS}
+              className="font-display font-extrabold text-2xl sm:text-4xl lg:text-5xl text-white tracking-tight"
+            >
               {SITE_CONTENT.finalCta.title}
-            </h2>
-            <p className="mt-4 text-base sm:text-lg text-violet-100/90 leading-relaxed">
+            </motion.h2>
+            <motion.p
+              variants={FADE_UP_ITEM_VARIANTS}
+              className="mt-4 text-base sm:text-lg text-violet-100/90 leading-relaxed"
+            >
               {SITE_CONTENT.finalCta.subtitle}
-            </p>
+            </motion.p>
 
-            <div className="mt-8 flex flex-col sm:flex-row flex-wrap items-center justify-center gap-3.5">
+            <motion.div
+              variants={FADE_UP_ITEM_VARIANTS}
+              className="mt-8 flex flex-col sm:flex-row flex-wrap items-center justify-center gap-3.5"
+            >
               <a
                 href={SITE_CONTENT.brand.telegramUrl}
                 target="_blank"
@@ -985,11 +1075,11 @@ function FinalCTA({ onOpenProjectModal }: { onOpenProjectModal: () => void }) {
                 <Sparkles className="w-4 h-4 text-violet-200" />
                 <span>طلب مشروع مخصّص</span>
               </button>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 }
 
