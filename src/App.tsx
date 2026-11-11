@@ -2054,6 +2054,7 @@ function AnimatedLandingBackground() {
 // ─────────────────────────────────────────────────────────────
 // التطبيق الرئيسي (App) — يجمع الأقسام بالترتيب المطلوب بالضبط:
 // Navbar -> Hero (+ Stats) -> Features -> HowItWorks -> Payments -> FAQ -> FinalCTA -> Footer
+// مع عرض مؤشر التحميل المخصّص لشعار Sʜᴀᴅᴏᴡ𝐗 عند فتح الموقع لأول مرة
 // ─────────────────────────────────────────────────────────────
 export default function App() {
   const [projectModalOpen, setProjectModalOpen] = useState(false);
@@ -2063,7 +2064,7 @@ export default function App() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsInitialLoading(false);
-    }, 280);
+    }, 950);
     return () => clearTimeout(timer);
   }, []);
 
@@ -2077,18 +2078,26 @@ export default function App() {
 
       <Navbar onOpenProjectModal={() => setProjectModalOpen(true)} />
 
-      {isInitialLoading ? (
-        <SectionsSkeleton />
-      ) : (
-        <main className="relative z-10 flex-1">
-          <Hero onOpenProjectModal={() => setProjectModalOpen(true)} />
-          <Features />
-          <HowItWorks />
-          <Payments />
-          <FAQ />
-          <FinalCTA onOpenProjectModal={() => setProjectModalOpen(true)} />
-        </main>
-      )}
+      <AnimatePresence mode="wait">
+        {isInitialLoading ? (
+          <SectionsSkeleton />
+        ) : (
+          <motion.main
+            key="main-content"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.35 }}
+            className="relative z-10 flex-1"
+          >
+            <Hero onOpenProjectModal={() => setProjectModalOpen(true)} />
+            <Features />
+            <HowItWorks />
+            <Payments />
+            <FAQ />
+            <FinalCTA onOpenProjectModal={() => setProjectModalOpen(true)} />
+          </motion.main>
+        )}
+      </AnimatePresence>
 
       <div className="relative z-10">
         <Footer onOpenInfoModal={(key) => setInfoModalKey(key)} />
