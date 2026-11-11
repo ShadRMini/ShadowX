@@ -34,6 +34,8 @@ import {
   Check,
   Sparkles,
   ArrowLeft,
+  MessageCircle,
+  Phone,
 } from 'lucide-react';
 import { motion, AnimatePresence, useScroll, useSpring } from 'motion/react';
 import {
@@ -954,14 +956,34 @@ function FinalCTA({ onOpenProjectModal }: { onOpenProjectModal: () => void }) {
               {SITE_CONTENT.finalCta.subtitle}
             </p>
 
-            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-              <button
-                type="button"
-                onClick={onOpenProjectModal}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl font-display font-bold text-base bg-white text-[#1e1b4b] hover:bg-violet-50 shadow-xl transition-all duration-200 hover:-translate-y-1 whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+            <div className="mt-8 flex flex-col sm:flex-row flex-wrap items-center justify-center gap-3.5">
+              <a
+                href={SITE_CONTENT.brand.telegramUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-2xl font-display font-bold text-base bg-white text-[#1e1b4b] hover:bg-violet-50 shadow-xl transition-all duration-200 hover:-translate-y-1 whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
               >
                 <Send className="w-5 h-5 text-[#3434d9]" />
                 <span>{SITE_CONTENT.finalCta.buttonText}</span>
+              </a>
+
+              <a
+                href={SITE_CONTENT.brand.whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-2xl font-display font-bold text-base bg-emerald-500/20 hover:bg-emerald-500/30 text-white border border-emerald-400/40 shadow-xl transition-all duration-200 hover:-translate-y-1 whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300"
+              >
+                <MessageCircle className="w-5 h-5 text-emerald-300" />
+                <span>{SITE_CONTENT.finalCta.whatsappButtonText}</span>
+              </a>
+
+              <button
+                type="button"
+                onClick={onOpenProjectModal}
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 rounded-2xl font-display font-bold text-sm bg-white/10 hover:bg-white/15 text-violet-100 border border-white/20 transition-all duration-200 hover:-translate-y-1 whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+              >
+                <Sparkles className="w-4 h-4 text-violet-200" />
+                <span>طلب مشروع مخصّص</span>
               </button>
             </div>
           </div>
@@ -979,8 +1001,8 @@ function Footer({ onOpenInfoModal }: { onOpenInfoModal: (key: string) => void })
     <footer className="border-t border-white/[0.08] bg-[#090910] py-12">
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
         <div className="flex flex-col md:flex-row items-center justify-between gap-8 pb-8 border-b border-white/[0.06]">
-          {/* يميناً: الشعار + سطر الفريق البرمجي الرسمي */}
-          <div className="flex flex-col items-center md:items-start gap-2.5 text-center md:text-right">
+          {/* يميناً: الشعار + سطر الفريق البرمجي الرسمي + قنوات التواصل */}
+          <div className="flex flex-col items-center md:items-start gap-3 text-center md:text-right">
             <BrandLogo />
             <p className="text-sm text-slate-400">
               {SITE_CONTENT.footer.tagline} —{' '}
@@ -993,6 +1015,29 @@ function Footer({ onOpenInfoModal }: { onOpenInfoModal: (key: string) => void })
                 shad-vip.store
               </a>
             </p>
+            <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 pt-1">
+              <a
+                href={SITE_CONTENT.brand.telegramUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/[0.04] hover:bg-[#3434d9]/20 border border-white/[0.08] hover:border-violet-400/40 text-xs font-medium text-slate-300 hover:text-white transition-all"
+              >
+                <Send className="w-3.5 h-3.5 text-violet-400" />
+                <span>قناة تيليجرام الرسمية</span>
+              </a>
+              <a
+                href={SITE_CONTENT.brand.whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/[0.04] hover:bg-emerald-500/15 border border-white/[0.08] hover:border-emerald-400/40 text-xs font-medium text-slate-300 hover:text-white transition-all"
+              >
+                <Phone className="w-3.5 h-3.5 text-emerald-400" />
+                <span>واتساب:</span>
+                <span dir="ltr" className="font-mono text-emerald-300">
+                  {SITE_CONTENT.brand.whatsappNumber}
+                </span>
+              </a>
+            </div>
           </div>
 
           {/* روابط التذييل */}
@@ -1023,7 +1068,7 @@ function Footer({ onOpenInfoModal }: { onOpenInfoModal: (key: string) => void })
 }
 
 // ─────────────────────────────────────────────────────────────
-// نافذة طلب مشروع جديد / التواصل عبر تيليجرام (Interactive Modal)
+// نافذة طلب مشروع جديد / التواصل عبر تيليجرام وواتساب (Interactive Modal)
 // ─────────────────────────────────────────────────────────────
 function ProjectInquiryModal({
   isOpen,
@@ -1056,6 +1101,8 @@ function ProjectInquiryModal({
 • اسم المتجر المقترح: ${projectName || 'قيد التحديد'}
 • بوابات الدفع المطلوبة: ${selectedPayments.join('، ') || 'الكل'}
 • معرف التواصل: ${contactHandle || 'مباشر'}`;
+
+  const whatsappDirectUrl = `${SITE_CONTENT.brand.whatsappUrl}?text=${encodeURIComponent(summaryText)}`;
 
   const handleCopySummary = () => {
     navigator.clipboard.writeText(summaryText);
@@ -1245,6 +1292,32 @@ function ProjectInquiryModal({
                   />
                   <span>{SITE_CONTENT.projectModal.submitButton}</span>
                 </motion.button>
+
+                {/* روابط تواصل سريعة مباشرة */}
+                <div className="pt-2 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-400 border-t border-white/[0.06]">
+                  <span>أو تواصل معنا مباشرة:</span>
+                  <div className="flex items-center gap-3">
+                    <a
+                      href={SITE_CONTENT.brand.telegramUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-violet-300 hover:text-white transition-colors"
+                    >
+                      <Send className="w-3.5 h-3.5" />
+                      <span>تيليجرام</span>
+                    </a>
+                    <span className="text-white/20">|</span>
+                    <a
+                      href={SITE_CONTENT.brand.whatsappUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-emerald-300 hover:text-white transition-colors"
+                    >
+                      <MessageCircle className="w-3.5 h-3.5" />
+                      <span dir="ltr">{SITE_CONTENT.brand.whatsappNumber}</span>
+                    </a>
+                  </div>
+                </div>
               </form>
             ) : (
               <div className="mt-6 space-y-5">
@@ -1257,16 +1330,41 @@ function ProjectInquiryModal({
                   {summaryText}
                 </div>
 
+                {/* أزرار الإرسال المباشر عبر واتساب وتيليجرام */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <motion.a
+                    href={whatsappDirectUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    whileTap={{ scale: 0.96 }}
+                    className="py-3 px-4 rounded-2xl font-bold text-sm text-white bg-gradient-to-l from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 shadow-lg shadow-emerald-600/25 flex items-center justify-center gap-2 transition-all"
+                  >
+                    <MessageCircle className="w-4 h-4 text-emerald-100" />
+                    <span>إرسال الطلب عبر واتساب</span>
+                  </motion.a>
+
+                  <motion.a
+                    href={SITE_CONTENT.brand.telegramUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    whileTap={{ scale: 0.96 }}
+                    className="py-3 px-4 rounded-2xl font-bold text-sm text-white bg-gradient-to-l from-[#3434d9] to-[#7c3aed] hover:from-[#3f3fe6] hover:to-[#8b5cf6] shadow-lg shadow-[#3434d9]/25 flex items-center justify-center gap-2 transition-all"
+                  >
+                    <Send className="w-4 h-4 text-violet-100" />
+                    <span>فتح قناة تيليجرام</span>
+                  </motion.a>
+                </div>
+
                 <div className="flex flex-col sm:flex-row items-center gap-3">
                   {/* زر النسخ مع تأثير نبض وتغيير لون الأيقونة مؤقتاً */}
                   <motion.button
                     type="button"
                     whileTap={{ scale: 0.95 }}
                     onClick={handleCopySummary}
-                    className={`relative overflow-hidden w-full sm:w-auto flex-1 py-3 px-5 rounded-2xl font-bold text-sm text-white transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer ${
+                    className={`relative overflow-hidden w-full sm:w-auto flex-1 py-3 px-5 rounded-2xl font-bold text-sm text-white transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer border ${
                       copied
-                        ? 'bg-gradient-to-l from-emerald-600 to-teal-600 ring-4 ring-emerald-400/35 shadow-lg shadow-emerald-500/25'
-                        : 'bg-gradient-to-l from-[#3434d9] to-[#7c3aed] hover:from-[#3f3fe6] hover:to-[#8b5cf6] shadow-lg shadow-[#3434d9]/25'
+                        ? 'bg-emerald-500/20 border-emerald-400/50 ring-4 ring-emerald-400/25'
+                        : 'bg-white/[0.06] border-white/10 hover:bg-white/10'
                     }`}
                   >
                     <AnimatePresence>
@@ -1277,7 +1375,7 @@ function ProjectInquiryModal({
                           animate={{ scale: 2.4, opacity: 0 }}
                           exit={{ opacity: 0 }}
                           transition={{ duration: 0.55 }}
-                          className="pointer-events-none absolute inset-0 rounded-2xl bg-emerald-300/30"
+                          className="pointer-events-none absolute inset-0 rounded-2xl bg-emerald-300/20"
                         />
                       )}
                     </AnimatePresence>
@@ -1292,7 +1390,7 @@ function ProjectInquiryModal({
                           transition={{ duration: 0.22 }}
                           className="inline-flex items-center gap-2"
                         >
-                          <Check className="w-4 h-4 text-emerald-200 stroke-[2.5]" />
+                          <Check className="w-4 h-4 text-emerald-300 stroke-[2.5]" />
                           <span>تم نسخ تفاصيل المشروع</span>
                         </motion.span>
                       ) : (
@@ -1304,8 +1402,8 @@ function ProjectInquiryModal({
                           transition={{ duration: 0.16 }}
                           className="inline-flex items-center gap-2"
                         >
-                          <Copy className="w-4 h-4 text-violet-200" />
-                          <span>نسخ ملخص المشروع للتواصل</span>
+                          <Copy className="w-4 h-4 text-violet-300" />
+                          <span>نسخ ملخص المشروع</span>
                         </motion.span>
                       )}
                     </AnimatePresence>

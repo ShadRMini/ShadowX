@@ -71,6 +71,9 @@ export const SITE_CONTENT = {
     emblemLogo: '/assets/aistudio/7_20261107_230645______08f45ae0.png',
     wordmarkLogo: '/assets/aistudio/6_20261107_230645______4e8b394e.png',
     officialStoreUrl: 'https://shad-vip.store',
+    telegramUrl: 'https://t.me/Shadowx_dev',
+    whatsappNumber: '+963944574989',
+    whatsappUrl: 'https://wa.me/963944574989',
   },
 
   navbar: {
@@ -258,7 +261,8 @@ export const SITE_CONTENT = {
       },
       {
         question: 'كيف أتواصل معكم؟',
-        answer: 'عبر زر التواصل أو قناتنا على تيليجرام.',
+        answer:
+          'عبر قناتنا الرسمية على تيليجرام (t.me/Shadowx_dev) أو مباشرة عبر واتساب على الرقم (+963944574989).',
       },
     ] as FAQItem[],
   },
@@ -267,6 +271,7 @@ export const SITE_CONTENT = {
     title: 'جاهز لبناء متجرك الرقمي؟',
     subtitle: 'ابدأ مشروعك مع ShadowX واحصل على نظام مؤتمت جاهز للإنتاج',
     buttonText: 'تواصل معنا عبر تيليجرام',
+    whatsappButtonText: 'تواصل عبر واتساب',
   },
 
   footer: {
@@ -290,9 +295,9 @@ export const SITE_CONTENT = {
       'تطوير نظام مخصص وربط API مع المزودين',
     ],
     paymentOptions: ['شام كاش', 'سيرياتيل كاش', 'USDT', 'Binance Pay'],
-    submitButton: 'إرسال طلب المشروع عبر تيليجرام',
+    submitButton: 'تجهيز وإرسال طلب المشروع',
     successMessage:
-      'تم تجهيز ملخص مشروعك بنجاح! يمكنك الآن نسخ التفاصيل أو متابعة المحادثة المباشرة مع فريق الهندسة الرقمية.',
+      'تم تجهيز ملخص مشروعك بنجاح! يمكنك إرساله مباشرة عبر واتساب أو متابعة قناتنا الرسمية على تيليجرام.',
   },
 
   footerModals: {
